@@ -1,0 +1,23 @@
+import { test, expect } from '@playwright/test';
+test('визуальная проверка основных макетов', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/#/login');
+  await page.screenshot({ path: 'artifacts/login-desktop.png', fullPage: true });
+  await page.getByLabel('Электронная почта').fill('demo@example.com');
+  await page.getByLabel('Пароль', { exact: true }).fill('demopassword');
+  await page.getByRole('button', { name: 'Войти', exact: true }).click();
+  await expect(page.locator('h1')).toContainText('Добрый день');
+  await page.screenshot({ path: 'artifacts/dashboard-desktop.png', fullPage: true });
+  await page.goto('/#/app/inbox');
+  await page.screenshot({ path: 'artifacts/inbox-desktop.png', fullPage: true });
+  await page.goto('/#/app/projects/acme/widget');
+  await page.screenshot({ path: 'artifacts/widget-desktop.png', fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/#/app');
+  await page.screenshot({ path: 'artifacts/dashboard-mobile.png', fullPage: true });
+  await page.goto('/#/app/projects/acme/widget');
+  await page.screenshot({ path: 'artifacts/widget-mobile.png', fullPage: true });
+  await page.goto('/#/app/inbox');
+  await page.locator('.dialog-row').first().click();
+  await page.screenshot({ path: 'artifacts/inbox-mobile.png', fullPage: true });
+});
