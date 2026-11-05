@@ -31,8 +31,27 @@ export type Ticket = {
   description: string;
   projectId: string;
   attachment?: string;
-  status: 'Новая' | 'В работе' | 'Закрыта';
+  attachmentSize?: number;
+  number?: number;
+  status: 'Новая' | 'В работе' | 'Решена' | 'Закрыта';
   created: string;
+  updated?: string;
+  history?: TicketEvent[];
+};
+export type TicketEvent = { date: string; title: string; body: string };
+export type NotificationPreferences = {
+  unanswered: boolean;
+  processing: boolean;
+  support: boolean;
+};
+export type Transaction = {
+  id: string;
+  text: string;
+  amount: number;
+  date: string;
+  price?: number;
+  method?: 'card' | 'sbp';
+  demo?: boolean;
 };
 export type WidgetConfig = {
   name: string;
@@ -52,7 +71,12 @@ export type WidgetConfig = {
   avatar: string;
   published: boolean;
 };
-export type User = { name: string; email: string };
+export type User = {
+  name: string;
+  email: string;
+  avatar?: string;
+  notifications?: NotificationPreferences;
+};
 export type DB = {
   user: User | null;
   projects: Project[];
@@ -61,5 +85,6 @@ export type DB = {
   tickets: Ticket[];
   widgets: Record<string, WidgetConfig>;
   balance: number;
-  transactions: { id: string; text: string; amount: number; date: string }[];
+  transactions: Transaction[];
+  accountScreensVersion?: number;
 };

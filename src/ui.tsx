@@ -242,6 +242,18 @@ export function Progress({ value }: { value: number }) {
     </div>
   );
 }
-export function Avatar({ name, className = '' }: { name: string; className?: string }) {
-  return <span className={`avatar ${className}`}>{name.slice(0, 1).toUpperCase()}</span>;
+export function Avatar({
+  name,
+  className = '',
+  src,
+}: {
+  name: string;
+  className?: string;
+  src?: string;
+}) {
+  return (
+    <span className={`avatar ${className}`}>
+      {src ? <img className="avatar-image" src={src} alt="" /> : name.slice(0, 1).toUpperCase()}
+    </span>
+  );
 }

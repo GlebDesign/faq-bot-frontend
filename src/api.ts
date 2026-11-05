@@ -12,7 +12,20 @@ export class ApiError extends Error {
 export function readDemo(): DB {
   try {
     const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : structuredClone(seed);
+    if (!saved) return structuredClone(seed);
+    const db: DB = JSON.parse(saved);
+    // One-time upgrade of the local demo; keep existing projects, tickets and payments.
+    if (!db.accountScreensVersion) {
+      if (!db.tickets.length) db.tickets = structuredClone(seed.tickets);
+      if (!db.transactions.length) db.transactions = structuredClone(seed.transactions);
+      db.accountScreensVersion = 1;
+      try {
+        writeDemo(db);
+      } catch {
+        /* The UI can still read existing data when storage is full. */
+      }
+    }
+    return db;
   } catch {
     return structuredClone(seed);
   }

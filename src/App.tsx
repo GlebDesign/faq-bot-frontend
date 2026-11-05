@@ -25,11 +25,14 @@ import {
 import { StoreProvider, useStore } from './store';
 import { Avatar, Badge, Brand, Button } from './ui';
 import { Auth, Landing } from './pages/Auth';
-import { Dashboard, Overview, ProjectForm, SettingsPage } from './pages/Projects';
+import { Dashboard, Overview, ProjectForm } from './pages/Projects';
 import { Materials, Processing } from './pages/Materials';
 import { Testing, AutoCheck } from './pages/Testing';
 import { WidgetPage, WidgetDemo } from './pages/Widget';
-import { Statistics, Inbox, Tokens, Support, Platform, Partner } from './pages/Account';
+import { Statistics, Inbox, Platform, Partner } from './pages/Account';
+import { AccountSettings } from './pages/AccountSettings';
+import { Tokens } from './pages/Tokens';
+import { Support } from './pages/Support';
 const nav = [
   { to: '/app', label: 'Проекты', icon: LayoutGrid, end: true },
   { to: '/app/statistics', label: 'Общая статистика', icon: ChartNoAxesColumn },
@@ -80,7 +83,11 @@ function Shell() {
             Настройки
           </NavLink>
           <button className="user-profile" onClick={() => setProfile(!profile)}>
-            <Avatar name={db.user.name} className="dark-avatar" />
+            <Avatar
+              name={db.user.name}
+              src={db.user.avatar ?? '/profile-avatar.png'}
+              className="dark-avatar"
+            />
             <span>{db.user.name}</span>
             <ChevronRight size={19} />
           </button>
@@ -119,7 +126,11 @@ function Shell() {
             <span className="breadcrumb">
               {location.pathname.includes('/projects/')
                 ? 'Проекты'
-                : nav.find((n) => n.to === location.pathname)?.label || 'Главная'}
+                : location.pathname === '/app/settings'
+                  ? 'Настройки аккаунта'
+                  : location.pathname === '/app/tokens'
+                    ? 'Токены и оплата'
+                    : nav.find((n) => n.to === location.pathname)?.label || 'Главная'}
             </span>
           </div>
           <div className="top-actions">
@@ -135,13 +146,17 @@ function Shell() {
               {db.balance.toLocaleString('ru-RU')}
               <ChevronRight size={16} />
             </Link>
-            <button
+            <Link
+              to="/app/settings"
               className="icon-button top-avatar"
               aria-label="Настройки аккаунта"
-              onClick={() => setProfile(!profile)}
             >
-              <Avatar name={db.user.name} className="dark-avatar" />
-            </button>
+              <Avatar
+                name={db.user.name}
+                src={db.user.avatar ?? '/profile-avatar.png'}
+                className="dark-avatar"
+              />
+            </Link>
             <Button
               variant="dark"
               className="create-project-button"
@@ -244,7 +259,7 @@ export function App() {
           <Route path="inbox" element={<Inbox />} />
           <Route path="tokens" element={<Tokens />} />
           <Route path="support" element={<Support />} />
-          <Route path="settings" element={<SettingsPage />} />
+          <Route path="settings" element={<AccountSettings />} />
           <Route path="audit" element={<Platform />} />
           <Route path="partner" element={<Partner />} />
           <Route path="projects/:id" element={<ProjectLayout />}>

@@ -4,7 +4,7 @@ import { readDemo, writeDemo } from './api';
 import type { DB } from './types';
 type Store = {
   db: DB;
-  update: (fn: (draft: DB) => void) => void;
+  update: (fn: (draft: DB) => void) => boolean;
   toast: (message: string) => void;
 };
 const Context = createContext<Store>(null!);
@@ -28,9 +28,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       writeDemo(next);
     } catch {
       toast('Память браузера заполнена. Уменьшите размер вложений.');
-      return;
+      return false;
     }
     setDb(next);
+    return true;
   };
   return (
     <Context.Provider value={{ db, update, toast }}>

@@ -3,3 +3,11 @@ dist/
 test-results/
 playwright-report/
 .env.local
+
+node_modules/
+dist/
+.env
+.env.local
+artifacts/
+test-results/
+playwright-report/

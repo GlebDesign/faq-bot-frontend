@@ -59,9 +59,7 @@ test('списки внутри модального окна видны и пе
   await dialog.getByRole('combobox', { name: 'Проект (необязательно)', exact: true }).click();
   await page.getByRole('option', { name: 'North Studio', exact: true }).click();
   await dialog.getByRole('button', { name: 'Отправить заявку', exact: true }).click();
-  await expect(page.getByRole('row', { name: /Проверка выбора/ })).toContainText(
-    'Партнёрское подключение',
-  );
+  await expect(page.locator('.support-details-panel')).toContainText('Партнёрское подключение');
   const saved = await page.evaluate(
     () => JSON.parse(localStorage.getItem('faq-demo-v1')!).tickets[0],
   );
