@@ -1,0 +1,21 @@
+form > .layout-row {
+  margin-top: 20px;
+}
+.layout-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+.layout-row--between {
+  justify-content: space-between;
+}
+.layout-row--end {
+  justify-content: flex-end;
+}
+@media (max-width: 760px) {
+  td .layout-row {
+    gap: 8px;
+    white-space: nowrap;
+  }
+}

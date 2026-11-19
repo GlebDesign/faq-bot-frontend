@@ -1,0 +1,26 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.6px;
+  white-space: nowrap;
+}
+.brand__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  background: var(--accent);
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+}
+.brand__mark svg {
+  background: #7b9cb1;
+  border: 3px solid #b2c8d6;
+  border-radius: 5px;
+  width: 27px;
+  height: 27px;
+}

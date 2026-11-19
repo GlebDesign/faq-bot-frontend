@@ -1,0 +1,29 @@
+.search {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  background: var(--muted);
+  padding: 0 14px;
+  border-radius: 12px;
+  flex: 1;
+  color: var(--secondary);
+}
+.search input {
+  padding: 10px 0;
+  background: none;
+  min-width: 0;
+  min-height: 38px;
+}
+.search {
+  transition:
+    box-shadow 160ms,
+    background-color 160ms;
+}
+.search:focus-within {
+  background-color: white;
+  box-shadow: 0 0 0 2px #ff5a3640;
+}
+.search input:focus-visible {
+  outline: none;
+}

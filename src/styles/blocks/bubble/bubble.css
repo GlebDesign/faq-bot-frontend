@@ -1,0 +1,36 @@
+.bubble {
+  padding: 16px;
+  border-radius: 16px;
+  max-width: 85%;
+  width: fit-content;
+  font-size: 13px;
+  flex-shrink: 0;
+  overflow-wrap: anywhere;
+}
+.bubble.bubble--user {
+  background: var(--accent-soft);
+  align-self: flex-end;
+}
+.bubble.bubble--bot {
+  background: white;
+}
+.bubble.bubble--notice {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.bubble p {
+  margin: 6px 0;
+}
+.bubble .source {
+  display: block;
+  margin-top: 10px;
+}
+@media (max-width: 760px) {
+  .bubble {
+    max-width: 95%;
+    padding: 14px;
+  }
+}
+.bubble {
+  animation: view-appear 180ms ease-out;
+}

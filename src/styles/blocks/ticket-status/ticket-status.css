@@ -1,0 +1,23 @@
+.ticket-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 96px;
+  min-height: 28px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+  padding: 4px 8px;
+  white-space: nowrap;
+  background: var(--muted);
+  color: var(--secondary);
+  justify-self: start;
+}
+.ticket-status.ticket-status--in-progress {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.ticket-status.ticket-status--resolved {
+  color: var(--positive);
+}

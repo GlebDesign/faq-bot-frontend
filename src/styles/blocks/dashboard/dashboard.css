@@ -1,0 +1,18 @@
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.18fr) minmax(280px, 1fr);
+  gap: 16px;
+}
+.dashboard__grid > .panel + .panel {
+  margin-top: 0;
+}
+@media (max-width: 1200px) {
+  .dashboard__grid {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+}
+@media (max-width: 1000px) {
+  .dashboard__grid {
+    grid-template-columns: 1fr;
+  }
+}

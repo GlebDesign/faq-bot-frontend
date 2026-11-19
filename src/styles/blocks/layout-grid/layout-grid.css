@@ -1,0 +1,28 @@
+form > .layout-grid {
+  margin-top: 20px;
+}
+.layout-grid {
+  display: grid;
+  gap: 16px;
+}
+.layout-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.layout-grid--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.layout-grid--four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.layout-grid > .panel + .panel {
+  margin-top: 0;
+}
+@media (max-width: 760px) {
+  .layout-grid--two,
+  .layout-grid--three {
+    grid-template-columns: 1fr;
+  }
+  .layout-grid.layout-grid--four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,75 @@
+.widget-demo {
+  padding: 60px;
+  min-height: 100vh;
+  background: #fff;
+}
+.widget-demo h1 {
+  margin: 40px 0 16px;
+}
+.widget-demo__window {
+  position: fixed;
+  width: min(390px, calc(100vw - 24px));
+  box-shadow: 0 10px 50px #0002;
+  border-radius: 20px;
+  background: #fff;
+}
+.widget-demo__window .widget__messages {
+  min-height: 300px;
+  max-height: 65vh;
+}
+.widget-demo__close {
+  position: absolute;
+  right: 8px;
+  top: -36px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 8px #0001;
+}
+.widget-demo.widget-demo--embedded {
+  background: transparent;
+  padding: 0;
+}
+.widget-demo--embedded .widget-demo__window {
+  width: 100vw;
+  max-width: 100%;
+  box-shadow: none;
+  height: 100dvh;
+  border-radius: 0;
+}
+.widget-demo--embedded .widget {
+  height: 100%;
+}
+.widget-demo--embedded .widget__messages {
+  flex: 1;
+  max-height: none;
+}
+.widget-demo--embedded .widget-demo__close {
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+}
+.widget-demo--embedded .widget__header {
+  padding-right: 42px;
+}
+.widget-demo--embedded .widget__header .badge {
+  display: none;
+}
+@media (max-width: 760px) {
+  .widget-demo {
+    padding: 32px;
+  }
+}
+.widget-demo__close {
+  transition:
+    background-color 160ms,
+    color 160ms,
+    box-shadow 160ms,
+    transform 160ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .widget-demo__close:hover {
+    background-color: #1717140a;
+  }
+}

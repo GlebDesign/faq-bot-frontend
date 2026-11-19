@@ -1,0 +1,26 @@
+.workspace {
+  margin-left: 252px;
+  padding: 18px 32px 28px;
+  max-width: 1800px;
+  min-height: 100vh;
+}
+@media (min-width: 1600px) {
+  .workspace {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+}
+@media (max-width: 1200px) {
+  .workspace {
+    padding: 16px 24px;
+  }
+  .workspace {
+    margin-left: 224px;
+  }
+}
+@media (max-width: 760px) {
+  .workspace {
+    margin-left: 0;
+    padding: 10px 16px 24px;
+  }
+}

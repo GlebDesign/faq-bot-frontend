@@ -1,0 +1,55 @@
+.ticket-timeline {
+  list-style: none;
+  padding: 0 0 0 32px;
+  margin: 16px 0 0;
+}
+.ticket-timeline li {
+  position: relative;
+  min-height: 94px;
+  padding-bottom: 12px;
+}
+.ticket-timeline li::before {
+  content: '';
+  position: absolute;
+  left: -27px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--secondary);
+  background: white;
+  border-radius: 50%;
+}
+.ticket-timeline li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: -23px;
+  top: 18px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--line);
+}
+.ticket-timeline time,
+.ticket-timeline strong {
+  display: block;
+}
+.ticket-timeline time {
+  line-height: 16px;
+}
+.ticket-timeline strong {
+  margin-top: 4px;
+  line-height: 20px;
+  font-weight: 600;
+}
+.ticket-timeline p {
+  margin: 4px 0 0;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+.ticket-timeline .ticket-timeline__item--reply > div {
+  border-radius: 8px;
+  background: var(--accent-soft);
+}
+.ticket-timeline .ticket-timeline__item--reply::before {
+  background: var(--accent);
+  border-color: var(--accent);
+}

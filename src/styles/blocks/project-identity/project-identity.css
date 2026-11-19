@@ -1,0 +1,26 @@
+.project-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 10px 0 16px;
+}
+.project-identity h2 {
+  font-size: 21px;
+  margin-bottom: 2px;
+}
+.project-identity .badge {
+  margin-left: 2px;
+}
+@media (max-width: 760px) {
+  .project-identity {
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .project-identity h2 {
+    font-size: 19px;
+  }
+  .project-identity > .badge {
+    margin-left: auto;
+  }
+}

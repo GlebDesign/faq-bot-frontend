@@ -9,9 +9,9 @@ export class ApiError extends Error {
     super(message);
   }
 }
-export function readDemo(): DB {
+export function readDemo(storageKey = key): DB {
   try {
-    const saved = localStorage.getItem(key);
+    const saved = localStorage.getItem(storageKey);
     if (!saved) return structuredClone(seed);
     const db: DB = JSON.parse(saved);
     // One-time upgrade of the local demo; keep existing projects, tickets and payments.
@@ -20,7 +20,7 @@ export function readDemo(): DB {
       if (!db.transactions.length) db.transactions = structuredClone(seed.transactions);
       db.accountScreensVersion = 1;
       try {
-        writeDemo(db);
+        writeDemo(db, storageKey);
       } catch {
         /* The UI can still read existing data when storage is full. */
       }
@@ -30,8 +30,37 @@ export function readDemo(): DB {
     return structuredClone(seed);
   }
 }
-export function writeDemo(db: DB) {
-  localStorage.setItem(key, JSON.stringify(db));
+export function writeDemo(db: DB, storageKey = key) {
+  localStorage.setItem(storageKey, JSON.stringify(db));
+}
+export async function httpRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const headers = new Headers(options.headers);
+  if (options.body && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
+  let response: Response;
+  try {
+    response = await fetch(`${import.meta.env.VITE_API_URL || '/api'}${path}`, {
+      ...options,
+      headers,
+      credentials: 'include',
+      cache: 'no-store',
+      signal: options.signal ?? AbortSignal.timeout(10000),
+    });
+  } catch {
+    throw new ApiError(
+      0,
+      'Не удалось связаться с сервером. Проверьте подключение и попробуйте ещё раз.',
+    );
+  }
+  if (!response.ok) {
+    const error = await response.json().catch(() => null);
+    throw new ApiError(response.status, error?.message || 'Не удалось выполнить запрос');
+  }
+  if (response.status === 204) return undefined as T;
+  try {
+    return await response.json();
+  } catch {
+    throw new ApiError(502, 'Сервер вернул некорректный ответ. Попробуйте позже.');
+  }
 }
 /** Typed transport. Mock routes stay behind the same REST boundary as the future Go API. */
 export async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
@@ -52,16 +81,7 @@ export async function request<T>(path: string, options: RequestInit = {}): Promi
     }
     throw new ApiError(404, 'Демонстрационный маршрут не найден');
   }
-  const response = await fetch(`${env.VITE_API_URL || '/api'}${path}`, {
-    ...options,
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-  });
-  if (!response.ok) {
-    const error = await response.json().catch(() => null);
-    throw new ApiError(response.status, error?.message || 'Не удалось выполнить запрос');
-  }
-  return response.status === 204 ? (undefined as T) : response.json();
+  return httpRequest<T>(path, options);
 }
 export const api = {
   load: () => request<DB>('/state'),

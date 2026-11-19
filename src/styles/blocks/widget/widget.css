@@ -1,0 +1,129 @@
+.widget {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--widget-radius);
+  color: var(--widget-text);
+  background: var(--widget-bg);
+  min-width: 0;
+}
+.widget__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  background: var(--widget-accent);
+  color: white;
+  font-size: 13px;
+}
+.widget__header > img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.widget__header > span {
+  flex: 1;
+}
+.widget__header .badge {
+  font-size: 9px;
+  color: #fff;
+  background: #ffffff29;
+}
+.widget__messages {
+  min-height: 140px;
+  max-height: 320px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  font-size: 12px;
+}
+.widget__bubble {
+  padding: 12px 14px;
+  border-radius: var(--widget-radius);
+  background: var(--widget-message);
+  max-width: 90%;
+  overflow-wrap: anywhere;
+}
+.widget__bubble.widget__bubble--visitor {
+  align-self: flex-end;
+  background: var(--widget-accent);
+  color: white;
+}
+.widget__composer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 10px 10px;
+  border-radius: var(--widget-radius);
+  background: var(--widget-message);
+}
+.widget__composer input {
+  font-size: 11px;
+  min-height: 38px;
+  background: none;
+  color: var(--widget-text);
+  min-width: 0;
+  padding: 10px;
+}
+.widget__composer button {
+  color: var(--widget-accent);
+  padding: 8px;
+}
+.widget__contact .field {
+  margin-top: 8px;
+}
+.widget__launch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 46px;
+  min-height: 46px;
+  padding: 12px;
+  color: white;
+  font-weight: 600;
+}
+.widget__launch--floating {
+  position: fixed;
+  box-shadow: 0 4px 20px #0002;
+}
+.widget__header > .badge {
+  flex: 0 0 auto;
+}
+.widget__header > span:not(.badge) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .widget .badge {
+    font-size: 9px;
+  }
+  .widget__header {
+    font-size: 12px;
+  }
+}
+.widget__launch,
+.widget__composer button {
+  transition:
+    background-color 160ms,
+    color 160ms,
+    box-shadow 160ms,
+    transform 160ms;
+}
+.widget__launch:active {
+  transform: scale(0.96);
+}
+@media (hover: hover) and (pointer: fine) {
+  .widget__launch:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.95);
+  }
+  .widget__composer button:hover {
+    background-color: #1717140a;
+  }
+}

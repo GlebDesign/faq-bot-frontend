@@ -28,7 +28,7 @@ test('профиль: фото, отмена, сохранение, уведом
       'base64',
     ),
   });
-  await expect(page.locator('.profile-photo img')).toHaveAttribute('src', /^data:image\/png/);
+  await expect(page.locator('.profile__photo img')).toHaveAttribute('src', /^data:image\/png/);
   await page.getByLabel('Имя и фамилия').fill('Глеб Тестов');
   await page.getByLabel('Электронная почта', { exact: true }).fill('updated@example.com');
   await page.getByRole('switch', { name: 'Ответы поддержки' }).click();
@@ -43,7 +43,7 @@ test('профиль: фото, отмена, сохранение, уведом
   );
   await expect(page.getByRole('switch', { name: 'Ответы поддержки' })).toBeChecked();
   await expect(page.getByRole('switch', { name: 'Вопросы без ответа' })).not.toBeChecked();
-  await expect(page.locator('.top-avatar img')).toHaveAttribute('src', /^data:image\/png/);
+  await expect(page.locator('.topbar__avatar img')).toHaveAttribute('src', /^data:image\/png/);
   await page.getByRole('button', { name: 'Сменить пароль', exact: true }).click();
   const dialog = page.getByRole('dialog');
   await expect(dialog).toContainText('updated@example.com');
@@ -62,8 +62,8 @@ test('пакеты и оплата: клавиатура, отмена и еди
   await packages.getByRole('radio').nth(1).focus();
   await page.keyboard.press('ArrowRight');
   await expect(packages.getByRole('radio').nth(2)).toBeChecked();
-  await expect(page.locator('.payment-summary')).toContainText('Для команды');
-  await expect(page.locator('.payment-total')).toContainText('2 490');
+  await expect(page.locator('.payment__summary')).toContainText('Для команды');
+  await expect(page.locator('.payment__total')).toContainText('2 490');
   await page.getByRole('radio', { name: 'СБП', exact: true }).click();
   await page.getByRole('button', { name: 'Перейти к оплате' }).click();
   await expect(page.getByRole('dialog')).toContainText('Реальный платёж не производится');
@@ -72,30 +72,30 @@ test('пакеты и оплата: клавиатура, отмена и еди
   await page.getByRole('button', { name: 'Перейти к оплате' }).click();
   await page.getByRole('button', { name: 'Начислить тестовые токены' }).click();
   await expect(page.getByRole('link', { name: 'Баланс токенов' })).toContainText('124 800');
-  await expect(page.locator('.payment-history-table tbody tr').first()).toContainText(
+  await expect(page.locator('.payment-history__table tbody tr').first()).toContainText(
     'Для команды',
   );
-  await expect(page.locator('.payment-history-table tbody tr').first()).toContainText('Демо');
+  await expect(page.locator('.payment-history__table tbody tr').first()).toContainText('Демо');
   await page.reload();
-  await expect(page.locator('.token-balance-value')).toContainText('124 800');
-  await expect(page.locator('.payment-history-table tbody tr')).toHaveCount(3);
+  await expect(page.locator('.tokens__balance-value')).toContainText('124 800');
+  await expect(page.locator('.payment-history__table tbody tr')).toHaveCount(3);
 });
 
 test('поддержка: поиск, фильтры, история, новая заявка и возврат на мобильном', async ({
   page,
 }) => {
   await page.goto('/#/app/support');
-  await expect(page.locator('.support-details-panel')).toContainText('Ответ поддержки');
+  await expect(page.locator('.support__details')).toContainText('Ответ поддержки');
   await page.getByRole('button', { name: 'Закрытые', exact: true }).click();
-  await expect(page.locator('.support-ticket-row')).toHaveCount(1);
-  await expect(page.locator('.support-details-panel')).toContainText('Заявка решена');
+  await expect(page.locator('.support__ticket')).toHaveCount(1);
+  await expect(page.locator('.support__details')).toContainText('Заявка решена');
   await page.getByRole('button', { name: 'Все', exact: true }).click();
   await page.getByRole('textbox', { name: 'Поиск по заявкам' }).fill('North Studio');
-  await expect(page.locator('.support-ticket-row')).toHaveCount(1);
-  await expect(page.locator('.support-details-panel h2')).toHaveText('Вопрос по API');
+  await expect(page.locator('.support__ticket')).toHaveCount(1);
+  await expect(page.locator('.support__details h2')).toHaveText('Вопрос по API');
   await page.getByRole('textbox', { name: 'Поиск по заявкам' }).fill('ничего-не-найдено');
   await expect(page.getByRole('heading', { name: 'Ничего не найдено' })).toBeVisible();
-  await expect(page.locator('.support-details-panel')).not.toContainText('Вопрос по API');
+  await expect(page.locator('.support__details')).not.toContainText('Вопрос по API');
   await page.getByRole('button', { name: 'Создать заявку', exact: true }).click();
   const dialog = page.getByRole('dialog');
   await dialog.getByLabel('Тема заявки').fill('Новая интеграция');
@@ -108,19 +108,19 @@ test('поддержка: поиск, фильтры, история, новая
     .getByLabel('Вложение (до 25 МБ)')
     .setInputFiles({ name: 'details.txt', mimeType: 'text/plain', buffer: Buffer.from('Details') });
   await dialog.getByRole('button', { name: 'Отправить заявку' }).click();
-  await expect(page.locator('.support-details-panel')).toContainText('Новая интеграция');
-  await expect(page.locator('.support-details-panel')).toContainText('Партнёрское подключение');
-  await expect(page.locator('.support-details-panel')).toContainText('details.txt');
-  await expect(page.locator('.support-details-panel .ticket-status')).toHaveText('Новая');
+  await expect(page.locator('.support__details')).toContainText('Новая интеграция');
+  await expect(page.locator('.support__details')).toContainText('Партнёрское подключение');
+  await expect(page.locator('.support__details')).toContainText('details.txt');
+  await expect(page.locator('.support__details .ticket-status')).toHaveText('Новая');
   await page.reload();
-  await expect(page.locator('.support-details-panel')).toContainText('Новая интеграция');
+  await expect(page.locator('.support__details')).toContainText('Новая интеграция');
   await page.setViewportSize({ width: 360, height: 800 });
-  await expect(page.locator('.support-list-panel')).toBeVisible();
-  await page.locator('.support-ticket-row').first().click();
-  await expect(page.locator('.support-list-panel')).toBeHidden();
-  await expect(page.locator('.support-details-panel')).toBeVisible();
+  await expect(page.locator('.support__list')).toBeVisible();
+  await page.locator('.support__ticket').first().click();
+  await expect(page.locator('.support__list')).toBeHidden();
+  await expect(page.locator('.support__details')).toBeVisible();
   await page.getByRole('button', { name: 'К заявкам' }).click();
-  await expect(page.locator('.support-list-panel')).toBeVisible();
+  await expect(page.locator('.support__list')).toBeVisible();
 });
 
 test('новые экраны: desktop, tablet, mobile, изображения и отсутствие переполнения', async ({
@@ -157,11 +157,11 @@ test('новые экраны: desktop, tablet, mobile, изображения �
   await expect
     .poll(() =>
       page
-        .locator('.profile-photo img')
+        .locator('.profile__photo img')
         .evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0),
     )
     .toBe(true);
-  await expect(page.locator('.profile-photo img')).toHaveCSS('object-fit', 'cover');
+  await expect(page.locator('.profile__photo img')).toHaveCSS('object-fit', 'cover');
   expect(errors).toEqual([]);
 });
 
@@ -189,12 +189,12 @@ test('сохранённые до обновления профиль, заяв�
   });
   await page.goto('/#/app/support');
   await page.reload();
-  await expect(page.locator('.support-ticket-row')).toHaveCount(1);
-  await expect(page.locator('.support-details-panel')).toContainText('Старое обращение');
+  await expect(page.locator('.support__ticket')).toHaveCount(1);
+  await expect(page.locator('.support__details')).toContainText('Старое обращение');
   await expect(page.locator('.ticket-timeline')).toContainText('Заявка создана');
   await page.goto('/#/app/tokens');
-  await expect(page.locator('.token-balance-value')).toContainText('777');
-  await expect(page.locator('.payment-history-table')).toContainText('Старое пополнение');
+  await expect(page.locator('.tokens__balance-value')).toContainText('777');
+  await expect(page.locator('.payment-history__table')).toContainText('Старое пополнение');
   await page.goto('/#/app/settings');
   await expect(page.getByLabel('Имя и фамилия')).toHaveValue('Старый профиль');
 });

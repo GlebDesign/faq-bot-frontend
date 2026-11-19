@@ -1,0 +1,32 @@
+.metrics {
+  margin-bottom: 16px;
+}
+.metrics .panel {
+  padding: 18px 20px;
+}
+.metrics h2 {
+  font-size: 28px;
+  margin: 14px 0 9px;
+}
+.metrics p {
+  margin: 0;
+}
+@media (max-width: 1000px) {
+  .metrics {
+    gap: 12px;
+  }
+  .metrics .panel {
+    padding: 16px 14px;
+  }
+  .metrics h2 {
+    font-size: 24px;
+  }
+}
+@media (max-width: 760px) {
+  .metrics h2 {
+    font-size: 27px;
+  }
+  .metrics .badge {
+    font-size: 10px;
+  }
+}

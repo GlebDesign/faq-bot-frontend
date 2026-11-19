@@ -1,0 +1,217 @@
+.inbox {
+  display: grid;
+  grid-template-columns: 376px minmax(0, 1fr);
+  height: 676px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.inbox__list {
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+  gap: 14px;
+  min-height: 0;
+}
+.inbox__list > .layout-row,
+.inbox__list > .search,
+.inbox__list > select,
+.inbox__list > .filter-pills {
+  margin: 0 12px;
+  width: auto;
+  flex-shrink: 0;
+}
+.inbox__list > .search {
+  flex: 0;
+}
+.inbox__list > select {
+  font-size: 12px;
+  min-height: 36px;
+  padding: 8px 12px;
+}
+.inbox__dialogs {
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.inbox__dialog {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  padding: 14px;
+  border-radius: 14px;
+  text-align: left;
+  width: 100%;
+  min-height: 94px;
+}
+.inbox__dialog.inbox__dialog--selected {
+  background: var(--accent-soft);
+}
+.inbox__dialog.inbox__dialog--selected:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 16px;
+  bottom: 16px;
+  width: 3px;
+  background: var(--accent);
+  border-radius: 4px;
+}
+.inbox__dialog > .avatar {
+  width: 38px;
+  height: 38px;
+  font-size: 14px;
+  background: var(--muted);
+}
+.inbox__dialog > div {
+  min-width: 0;
+  flex: 1;
+}
+.inbox__dialog .layout-row {
+  gap: 6px;
+  align-items: flex-start;
+}
+.inbox__dialog b {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.inbox__dialog p {
+  font-size: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 4px 0;
+}
+.inbox__dialog .text--tiny {
+  font-size: 9px;
+  white-space: nowrap;
+}
+.inbox__dialog .source {
+  font-size: 9px;
+  padding: 4px 10px;
+}
+.inbox__unread {
+  position: absolute;
+  right: 14px;
+  bottom: 22px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.inbox__chat {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+.inbox__header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  min-height: 76px;
+}
+.inbox__header h3 {
+  font-size: 16px;
+}
+.inbox__header p {
+  margin: 3px 0 0;
+  font-size: 11px;
+}
+.inbox__header > .badge {
+  margin-left: auto;
+}
+.inbox__chat > .composer {
+  margin: 12px 16px 16px;
+}
+@media (max-width: 1200px) {
+  .inbox {
+    grid-template-columns: 320px minmax(0, 1fr);
+  }
+  .inbox__header {
+    padding: 16px;
+  }
+  .inbox__header > .avatar {
+    display: none;
+  }
+  .inbox__header > .badge {
+    font-size: 9px;
+  }
+  .inbox__header h3 {
+    font-size: 14px;
+  }
+}
+@media (max-width: 1000px) {
+  .inbox {
+    grid-template-columns: 290px minmax(0, 1fr);
+  }
+  .inbox__header > .badge {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .inbox {
+    display: block;
+    height: calc(100dvh - 235px);
+    min-height: 480px;
+    border-radius: 18px;
+  }
+  .inbox__list {
+    height: 100%;
+    border: 0;
+  }
+  .inbox__chat {
+    display: none;
+    height: 100%;
+  }
+  .inbox.inbox--show-chat .inbox__list {
+    display: none;
+  }
+  .inbox.inbox--show-chat .inbox__chat {
+    display: flex;
+  }
+  .inbox__header {
+    gap: 8px;
+    min-height: 76px;
+  }
+  .inbox__header h3 {
+    font-size: 13px;
+  }
+  .inbox__chat > .composer {
+    margin: 10px;
+  }
+  .inbox__dialog {
+    min-height: 94px;
+  }
+  .inbox__dialog b {
+    font-size: 13px;
+  }
+}
+.inbox__list > .select__trigger {
+  margin: 0 12px;
+  width: auto;
+  min-height: 36px;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.inbox__dialog {
+  transition:
+    background-color 160ms,
+    color 160ms,
+    box-shadow 160ms,
+    transform 160ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .inbox__dialog:not(.inbox__dialog--selected):hover {
+    background-color: var(--shell);
+  }
+  .inbox__dialog.inbox__dialog--selected:hover {
+    background-color: #ffe7dd;
+  }
+}

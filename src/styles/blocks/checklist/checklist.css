@@ -1,0 +1,44 @@
+.checklist__row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  font-size: 13px;
+}
+.checklist__dot {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+.checklist__dot.checklist__dot--done {
+  background: var(--positive);
+  border-color: var(--positive);
+  color: white;
+}
+.checklist__dot.checklist__dot--current {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.checklist {
+  background: var(--shell);
+  border-radius: 14px;
+  padding: 14px;
+  margin: 14px 0;
+}
+.checklist .layout-row {
+  font-size: 12px;
+  margin: 10px 0;
+  gap: 10px;
+}
+.checklist svg {
+  color: var(--accent);
+}
+@media (max-width: 760px) {
+  .checklist .layout-row {
+    font-size: 12px;
+  }
+}

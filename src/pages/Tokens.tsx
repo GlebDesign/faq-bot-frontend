@@ -18,31 +18,31 @@ export function Tokens() {
   const [payment, setPayment] = useState(false);
   const pack = packages[selected];
   return (
-    <div className="account-page tokens-page">
+    <div className="account-page tokens">
       <Heading title="Токены и оплата" sub="Единый баланс для всех проектов аккаунта" />
-      <Panel className="account-token-balance">
-        <span className="token-balance-icon">
+      <Panel className="tokens__balance">
+        <span className="tokens__balance-icon">
           <Database size={32} strokeWidth={1.5} />
         </span>
         <div>
-          <p className="small">Доступно на аккаунте</p>
-          <div className="token-balance-value">
+          <p className="text text--small">Доступно на аккаунте</p>
+          <div className="tokens__balance-value">
             <strong>{number(db.balance)}</strong>
-            <span className="muted">токенов</span>
+            <span className="text text--muted">токенов</span>
           </div>
         </div>
       </Panel>
-      <div className="token-purchase-grid">
-        <Panel className="token-packages-panel">
+      <div className="tokens__purchase">
+        <Panel className="tokens__packages">
           <h2>Выберите пакет</h2>
-          <p className="small muted">Разовое пополнение без подписки</p>
-          <div className="token-package-options" role="radiogroup" aria-label="Пакет токенов">
+          <p className="text text--small text--muted">Разовое пополнение без подписки</p>
+          <div className="tokens__options" role="radiogroup" aria-label="Пакет токенов">
             {packages.map((p, i) => (
               <button
                 type="button"
                 role="radio"
                 aria-checked={selected === i}
-                className={`token-package ${selected === i ? 'selected' : ''}`}
+                className={`token-package ${selected === i ? 'token-package--selected' : ''}`}
                 key={p.name}
                 onClick={() => setSelected(i)}
                 onKeyDown={(e) => {
@@ -67,28 +67,28 @@ export function Tokens() {
                 }}
                 tabIndex={selected === i ? 0 : -1}
               >
-                <span className="package-name">{p.name}</span>
-                <strong className="package-amount">{number(p.amount)}</strong>
-                <span className="muted">токенов</span>
-                <strong className="package-price">{money(p.price)}</strong>
-                <span className={selected === i ? 'accent' : 'muted'}>
+                <span className="token-package__name">{p.name}</span>
+                <strong className="token-package__amount">{number(p.amount)}</strong>
+                <span className="text text--muted">токенов</span>
+                <strong className="token-package__price">{money(p.price)}</strong>
+                <span className={selected === i ? 'text text--accent' : 'text text--muted'}>
                   {selected === i ? 'Выбрано' : 'Выбрать'}
                 </span>
               </button>
             ))}
           </div>
         </Panel>
-        <Panel className="token-payment-panel">
+        <Panel className="payment">
           <h2>Оплата</h2>
-          <div className="payment-summary">
+          <div className="payment__summary">
             <strong>Пакет «{pack.name}»</strong>
-            <span className="small muted">{number(pack.amount)} токенов</span>
+            <span className="text text--small text--muted">{number(pack.amount)} токенов</span>
           </div>
-          <div className="payment-total">
+          <div className="payment__total">
             <span>К оплате</span>
             <strong>{money(pack.price)}</strong>
           </div>
-          <div className="payment-methods" role="radiogroup" aria-label="Способ оплаты">
+          <div className="payment__methods" role="radiogroup" aria-label="Способ оплаты">
             {(
               [
                 ['card', 'Карта'],
@@ -100,7 +100,7 @@ export function Tokens() {
                 role="radio"
                 aria-checked={method === value}
                 key={value}
-                className={`button ${method === value ? 'dark' : 'secondary'}`}
+                className={`button ${method === value ? 'button--dark' : 'button--secondary'}`}
                 onClick={() => setMethod(value)}
                 tabIndex={method === value ? 0 : -1}
                 onKeyDown={(e) => {
@@ -131,17 +131,17 @@ export function Tokens() {
               </button>
             ))}
           </div>
-          <Button className="payment-submit" onClick={() => setPayment(true)}>
+          <Button className="payment__submit" onClick={() => setPayment(true)}>
             Перейти к оплате
           </Button>
-          <p className="small muted">Демо: платёж не производится.</p>
+          <p className="text text--small text--muted">Демо: платёж не производится.</p>
         </Panel>
       </div>
-      <p className="token-prices-hint small muted">Цены указаны для примера.</p>
-      <Panel className="payment-history-panel">
+      <p className="tokens__prices-hint text text--small text--muted">Цены указаны для примера.</p>
+      <Panel className="payment-history">
         <h2>История пополнений</h2>
-        <div className="table-scroll">
-          <table className="payment-history-table">
+        <div className="data-table__scroll">
+          <table className="payment-history__table">
             <thead>
               <tr>
                 <th>Дата</th>
@@ -158,24 +158,24 @@ export function Tokens() {
                   <td>{t.text}</td>
                   <td>+{number(t.amount)}</td>
                   <td>{t.price === undefined ? '—' : money(t.price)}</td>
-                  <td className="positive">{t.demo ? 'Демо' : 'Записано'}</td>
+                  <td className="text text--positive">{t.demo ? 'Демо' : 'Записано'}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        {!db.transactions.length && <p className="muted">Пополнений пока нет</p>}
+        {!db.transactions.length && <p className="text text--muted">Пополнений пока нет</p>}
       </Panel>
       {payment && (
         <Modal title="Демонстрация оплаты" onClose={() => setPayment(false)}>
           <p>
             Пакет «{pack.name}» — {number(pack.amount)} токенов за {money(pack.price)}.
           </p>
-          <p className="muted">
+          <p className="text text--muted">
             Способ: {method === 'card' ? 'банковская карта' : 'СБП'}. Реальный платёж не
             производится. Можно начислить тестовые токены на весь аккаунт.
           </p>
-          <div className="modal-actions">
+          <div className="modal__actions">
             <Button variant="secondary" onClick={() => setPayment(false)}>
               Отмена
             </Button>

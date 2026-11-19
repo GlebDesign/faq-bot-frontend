@@ -1,0 +1,23 @@
+.plain-button {
+  text-align: left;
+  padding: 0;
+}
+.plain-button span {
+  display: block;
+  margin-top: 4px;
+}
+.plain-button {
+  transition:
+    background-color 160ms,
+    color 160ms,
+    box-shadow 160ms,
+    transform 160ms;
+}
+.plain-button {
+  border-radius: 6px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .plain-button:hover {
+    color: var(--accent);
+  }
+}

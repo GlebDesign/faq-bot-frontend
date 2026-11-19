@@ -1,0 +1,8 @@
+.visibility--mobile {
+  display: none;
+}
+@media (max-width: 760px) {
+  .visibility--mobile {
+    display: inline-flex;
+  }
+}

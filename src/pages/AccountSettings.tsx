@@ -68,10 +68,10 @@ export function AccountSettings() {
   };
 
   return (
-    <div className="account-page settings-page">
+    <div className="account-page account-settings">
       <Heading title="Настройки аккаунта" sub="Личные данные, безопасность и уведомления" />
       <form
-        className="account-settings-form"
+        className="account-settings__form"
         onSubmit={(e) => {
           e.preventDefault();
           if (!name.trim()) return;
@@ -89,22 +89,22 @@ export function AccountSettings() {
             toast('Настройки сохранены');
         }}
       >
-        <div className="settings-top-grid">
-          <Panel className="profile-panel">
+        <div className="account-settings__grid">
+          <Panel className="profile">
             <h2>Профиль</h2>
-            <div className="profile-photo-row">
-              <Avatar name={name || user.name} src={avatar} className="profile-photo" />
+            <div className="profile__identity">
+              <Avatar name={name || user.name} src={avatar} className="profile__photo" />
               <div>
                 <h3>{name || user.name}</h3>
                 <button
                   type="button"
-                  className="text-link photo-action"
+                  className="text-link profile__photo-action"
                   onClick={() => fileInput.current?.click()}
                 >
                   <Upload size={16} />
                   {readingImage ? 'Загружаем фото…' : 'Изменить фото'}
                 </button>
-                <p className="small muted">JPG, PNG до 2 МБ</p>
+                <p className="text text--small text--muted">JPG, PNG до 2 МБ</p>
               </div>
               <input
                 ref={fileInput}
@@ -120,7 +120,7 @@ export function AccountSettings() {
               />
             </div>
             {imageError && (
-              <p className="error" role="alert">
+              <p className="text text--error" role="alert">
                 {imageError}
               </p>
             )}
@@ -144,12 +144,14 @@ export function AccountSettings() {
               required
               maxLength={254}
             />
-            <p className="small muted profile-hint">Данные используются для входа и связи с вами</p>
+            <p className="text text--small text--muted profile__hint">
+              Данные используются для входа и связи с вами
+            </p>
           </Panel>
-          <Panel className="password-panel">
+          <Panel className="password-reset">
             <h2>Пароль</h2>
-            <div className="password-explanation">
-              <span className="password-icon">
+            <div className="password-reset__explanation">
+              <span className="password-reset__icon">
                 <Mail size={24} strokeWidth={1.7} />
               </span>
               <div>
@@ -157,11 +159,11 @@ export function AccountSettings() {
                 <strong>{user.email}</strong>
               </div>
             </div>
-            <div className="password-request">
+            <div className="password-reset__request">
               <Button type="button" variant="dark" onClick={() => setPassword(true)}>
                 Сменить пароль
               </Button>
-              <p className="muted">
+              <p className="text text--muted">
                 Перейдите по ссылке из письма,
                 <br />
                 чтобы задать новый пароль.
@@ -169,17 +171,19 @@ export function AccountSettings() {
             </div>
           </Panel>
         </div>
-        <Panel className="notifications-panel">
+        <Panel className="notifications">
           <h2>Уведомления</h2>
-          <p className="small muted">Выберите, о чём сообщать вам по электронной почте</p>
-          <div className="notification-list">
+          <p className="text text--small text--muted">
+            Выберите, о чём сообщать вам по электронной почте
+          </p>
+          <div className="notifications__list">
             {notificationRows.map(([key, title, description]) => (
-              <div className="notification-row" key={key}>
+              <div className="notifications__row" key={key}>
                 <div>
                   <label id={`notification-${key}`} htmlFor={`switch-${key}`}>
                     {title}
                   </label>
-                  <p className="small muted">{description}</p>
+                  <p className="text text--small text--muted">{description}</p>
                 </div>
                 <button
                   id={`switch-${key}`}
@@ -196,7 +200,7 @@ export function AccountSettings() {
             ))}
           </div>
         </Panel>
-        <div className="settings-actions">
+        <div className="account-settings__actions">
           <Button type="button" variant="secondary" onClick={restore}>
             Отмена
           </Button>
@@ -210,10 +214,10 @@ export function AccountSettings() {
           <p>
             Ссылка для смены пароля будет приходить на <strong>{user.email}</strong>.
           </p>
-          <p className="muted">
+          <p className="text text--muted">
             Сейчас доступен деморежим: письмо не отправляется. Отправку подключим вместе с сервером.
           </p>
-          <div className="modal-actions">
+          <div className="modal__actions">
             <Button variant="secondary" onClick={() => setPassword(false)}>
               Закрыть
             </Button>

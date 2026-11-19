@@ -1,0 +1,9 @@
+.code {
+  font-size: 11px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: var(--muted);
+  border-radius: 12px;
+  padding: 14px;
+  line-height: 1.6;
+}

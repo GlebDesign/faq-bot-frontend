@@ -1,0 +1,51 @@
+.auto-result {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  width: 100%;
+  font-size: 12px;
+  padding: 5px 0;
+}
+.auto-result:hover {
+  background: var(--shell);
+}
+.auto-result > span:nth-child(2) {
+  flex: 1;
+}
+.auto-result b {
+  white-space: nowrap;
+  font-size: 12px;
+}
+.auto-result .badge {
+  font-size: 10px;
+  padding: 4px 8px;
+  min-width: 66px;
+}
+@media (max-width: 1200px) {
+  .auto-result {
+    gap: 7px;
+  }
+  .auto-result .badge {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .auto-result {
+    padding: 8px 0;
+    font-size: 11px;
+  }
+}
+.auto-result {
+  transition:
+    background-color 160ms,
+    color 160ms,
+    box-shadow 160ms,
+    transform 160ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .auto-result:hover {
+    border-radius: 8px;
+    background-color: var(--muted);
+  }
+}

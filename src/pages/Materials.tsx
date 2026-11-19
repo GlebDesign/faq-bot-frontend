@@ -70,7 +70,7 @@ export function Materials({ adding = false }: { adding?: boolean }) {
       />
       {adding || !docs.length ? (
         <>
-          <div className="grid three source-grid">
+          <div className="layout-grid layout-grid--three materials__sources">
             {[
               {
                 kind: 'file' as const,
@@ -99,22 +99,24 @@ export function Materials({ adding = false }: { adding?: boolean }) {
                   <s.icon size={22} />
                 </span>
                 <h3>{s.title}</h3>
-                <p className="small muted">{s.desc}</p>
-                <span className="text-link small">{s.cta} →</span>
+                <p className="text text--small text--muted">{s.desc}</p>
+                <span className="text-link text text--small">{s.cta} →</span>
               </button>
             ))}
           </div>
           <div className="hint-strip">
             <div>
-              <b className="accent">Что дальше</b>
-              <p className="small">
+              <b className="text text--accent">Что дальше</b>
+              <p className="text text--small">
                 После обработки материалов станет доступна проверка ответов агента
               </p>
             </div>
           </div>
-          <p className="small muted">Можно добавить несколько источников и вернуться к ним позже</p>
+          <p className="text text--small text--muted">
+            Можно добавить несколько источников и вернуться к ним позже
+          </p>
           {docs.length > 0 && (
-            <Link className="button secondary" to={`/app/projects/${id}/materials`}>
+            <Link className="button button--secondary" to={`/app/projects/${id}/materials`}>
               К загруженным материалам <ArrowRight size={16} />
             </Link>
           )}
@@ -131,7 +133,11 @@ export function Materials({ adding = false }: { adding?: boolean }) {
                 ['media', 'Медиа'],
               ].map(([v, label]) => (
                 <button
-                  className={filter === v ? 'selected' : ''}
+                  className={
+                    filter === v
+                      ? 'filter-pills__button filter-pills__button--selected'
+                      : 'filter-pills__button'
+                  }
                   key={v}
                   onClick={() => setFilter(v)}
                 >
@@ -140,8 +146,8 @@ export function Materials({ adding = false }: { adding?: boolean }) {
               ))}
             </div>
           </Panel>
-          <Panel className="table-panel">
-            <div className="table-scroll">
+          <Panel className="data-table">
+            <div className="data-table__scroll">
               <table>
                 <thead>
                   <tr>
@@ -159,7 +165,7 @@ export function Materials({ adding = false }: { adding?: boolean }) {
                       <td>
                         <button className="plain-button" onClick={() => setEditing(d)}>
                           <b>{d.name}</b>
-                          <span className="small muted">{d.size}</span>
+                          <span className="text text--small text--muted">{d.size}</span>
                         </button>
                       </td>
                       <td>
@@ -171,9 +177,9 @@ export function Materials({ adding = false }: { adding?: boolean }) {
                               : 'Ошибка'}
                         </Badge>
                       </td>
-                      <td className="muted small">{d.updated}</td>
+                      <td className="text text--muted text--small">{d.updated}</td>
                       <td>
-                        <div className="row end">
+                        <div className="layout-row layout-row--end">
                           <button
                             className="icon-button"
                             aria-label={`Повторно обработать ${d.name}`}
@@ -202,10 +208,10 @@ export function Materials({ adding = false }: { adding?: boolean }) {
             </div>
             {!visible.length && (
               <Empty title="Материалы не найдены">
-                <p className="muted">Измените запрос или добавьте источник</p>
+                <p className="text text--muted">Измените запрос или добавьте источник</p>
               </Empty>
             )}
-            <div className="row between table-footer">
+            <div className="layout-row layout-row--between data-table__footer">
               <span>
                 Показано {visible.length} из {docs.length}
               </span>
@@ -311,31 +317,33 @@ export function Materials({ adding = false }: { adding?: boolean }) {
                 >
                   <Upload size={28} />
                   <h3>Перетащите файл сюда</h3>
-                  <span className="muted">или выберите на компьютере</span>
-                  <span className="small muted">До 25 МБ</span>
+                  <span className="text text--muted">или выберите на компьютере</span>
+                  <span className="text text--small text--muted">До 25 МБ</span>
                 </button>
                 {file && (
                   <div className="hint-strip">
                     <FileText size={20} />
                     <div>
                       <b>{file.name}</b>
-                      <p className="small muted">{(file.size / 1024).toFixed(1)} КБ</p>
+                      <p className="text text--small text--muted">
+                        {(file.size / 1024).toFixed(1)} КБ
+                      </p>
                     </div>
                     <Check size={18} />
                   </div>
                 )}
-                <p className="small muted">
+                <p className="text text--small text--muted">
                   Демо: сохраняется название файла. Разбор PDF, документов и транскрибация
                   выполняются сервером.
                 </p>
               </>
             )}
             {error && (
-              <p role="alert" className="error">
+              <p role="alert" className="text text--error">
                 {error}
               </p>
             )}
-            <div className="row end">
+            <div className="layout-row layout-row--end">
               <Button
                 type="button"
                 variant="secondary"
@@ -354,7 +362,7 @@ export function Materials({ adding = false }: { adding?: boolean }) {
       {deleting && (
         <Modal title="Удалить материал?" onClose={() => setDeleting(undefined)}>
           <p>«{deleting.name}» будет удалён из базы знаний проекта.</p>
-          <div className="row end">
+          <div className="layout-row layout-row--end">
             <Button variant="secondary" onClick={() => setDeleting(undefined)}>
               Отмена
             </Button>
@@ -408,7 +416,7 @@ export function Processing() {
       />
       <Panel className="processing">
         <div
-          className="progress-circle"
+          className="processing__circle"
           style={{
             background: `conic-gradient(var(--accent) ${progress * 3.6}deg,var(--muted) 0)`,
           }}
@@ -416,7 +424,7 @@ export function Processing() {
           <span>{progress}%</span>
         </div>
         <h2>{progress === 100 ? 'Материалы обработаны' : 'Обрабатываем материалы'}</h2>
-        <p className="muted">
+        <p className="text text--muted">
           {progress === 100
             ? 'Теперь можно проверить ответы агента'
             : 'Демонстрация этапов: фрагменты, индексирование, подготовка поиска'}
@@ -428,12 +436,12 @@ export function Processing() {
         {db.documents
           .filter((d) => d.projectId === id)
           .map((d) => (
-            <div className="document-progress row between" key={d.id}>
-              <div className="row">
+            <div className="processing__document layout-row layout-row--between" key={d.id}>
+              <div className="layout-row">
                 <FileText size={20} />
                 <div>
                   <b>{d.name}</b>
-                  <p className="muted small">{d.size}</p>
+                  <p className="text text--muted text--small">{d.size}</p>
                 </div>
               </div>
               <Badge good={progress === 100}>
@@ -442,9 +450,9 @@ export function Processing() {
             </div>
           ))}
       </Panel>
-      <div className="row end">
+      <div className="layout-row layout-row--end">
         <Link
-          className={`button ${progress === 100 ? 'primary' : 'secondary disabled'}`}
+          className={`button ${progress === 100 ? 'button--primary' : 'button--secondary button--disabled'}`}
           aria-disabled={progress !== 100}
           onClick={(e) => {
             if (progress !== 100) e.preventDefault();

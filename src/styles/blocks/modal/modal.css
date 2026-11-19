@@ -1,0 +1,27 @@
+.modal {
+  padding: 32px;
+}
+.modal > .layout-row h2 {
+  font-size: 26px;
+}
+@media (max-width: 760px) {
+  .modal {
+    padding: 24px;
+  }
+  .modal .layout-grid.layout-grid--two {
+    grid-template-columns: 1fr 1fr;
+  }
+  .modal > .layout-row h2 {
+    font-size: 22px;
+  }
+  .modal .button {
+    padding: 12px 16px;
+  }
+}
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}

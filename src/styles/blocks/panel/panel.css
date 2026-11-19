@@ -1,0 +1,32 @@
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  min-width: 0;
+}
+.panel + .panel {
+  margin-top: 16px;
+}
+.panel > h3 + p {
+  margin-top: 6px;
+}
+.panel--narrow {
+  max-width: 650px;
+}
+@media (max-width: 760px) {
+  .panel {
+    padding: 18px;
+    border-radius: 18px;
+  }
+}
+
+.panel__link {
+  display: block;
+  margin: 30px 0 4px 56px;
+  font-size: 12px;
+}
+@media (max-width: 760px) {
+  .panel__link {
+    margin-top: 24px;
+  }
+}

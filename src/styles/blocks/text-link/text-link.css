@@ -1,0 +1,25 @@
+.text-link {
+  color: var(--accent);
+}
+.text-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+}
+.text-link:hover {
+  text-decoration: underline;
+}
+.text-link {
+  transition:
+    background-color 160ms,
+    color 160ms,
+    box-shadow 160ms,
+    transform 160ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .text-link:hover {
+    color: #d84324;
+  }
+}

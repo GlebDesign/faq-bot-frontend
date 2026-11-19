@@ -1,0 +1,8 @@
+.layout-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.layout-stack > .panel + .panel {
+  margin-top: 0;
+}

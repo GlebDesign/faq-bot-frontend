@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { createServer } from 'node:http';
-test('изолированный loader на стороннем origin и заявка посетителя', async ({ page }) => {
+test('изолированный loader на стороннем origin и заявка посетителя', async ({ page, baseURL }) => {
   const server = createServer((_req, res) => {
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.end(
-      '<!doctype html><html lang="ru"><title>Внешний сайт</title><body><h1>Сайт клиента</h1><script src="http://127.0.0.1:5173/loader.js" data-agent="acme" defer></script></body></html>',
+      `<!doctype html><html lang="ru"><title>Внешний сайт</title><body><h1>Сайт клиента</h1><script src="${baseURL}/loader.js" data-agent="acme" defer></script></body></html>`,
     );
   });
   await new Promise<void>((resolve) => server.listen(5180, '127.0.0.1', resolve));

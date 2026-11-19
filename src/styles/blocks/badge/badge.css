@@ -1,0 +1,17 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 6px 12px;
+  border-radius: 30px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 500;
+}
+.badge.badge--good {
+  background: #e9f6f0;
+  color: #208c59;
+}

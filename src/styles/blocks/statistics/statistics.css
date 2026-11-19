@@ -1,0 +1,25 @@
+.statistics__grid > .panel + .panel {
+  margin-top: 0;
+}
+.statistics__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2.05fr) minmax(290px, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.statistics__quality {
+  margin-top: 22px;
+}
+.statistics__quality .progress {
+  margin-top: 8px;
+}
+@media (max-width: 1200px) {
+  .statistics__grid {
+    grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr);
+  }
+}
+@media (max-width: 1000px) {
+  .statistics__grid {
+    grid-template-columns: 1fr;
+  }
+}

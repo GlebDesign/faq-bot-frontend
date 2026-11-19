@@ -1,0 +1,46 @@
+.text--small {
+  font-size: 12px;
+}
+.text--tiny {
+  font-size: 10px;
+}
+.text--muted {
+  color: var(--secondary);
+}
+.text--accent {
+  color: var(--accent);
+}
+.text--positive {
+  color: var(--positive);
+}
+.text--error {
+  color: #b63124;
+  font-size: 13px;
+}
+.text--large-number {
+  margin-top: 20px;
+  font-size: 28px;
+}
+.text--section-label {
+  margin: 32px 0 12px;
+}
+.text--hero-number {
+  font-size: 36px;
+  margin-top: 24px;
+}
+.text--right {
+  text-align: right;
+}
+.text--pre-wrap {
+  white-space: pre-wrap;
+}
+.text--eyebrow {
+  font-size: 11px;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+@media (max-width: 760px) {
+  .text--hero-number {
+    font-size: 34px;
+  }
+}

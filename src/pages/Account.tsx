@@ -25,7 +25,7 @@ export function Statistics({ project = false }: { project?: boolean }) {
         action={
           <Select
             aria-label="Период статистики"
-            className="period"
+            className="select__trigger--period"
             value={period}
             onValueChange={setPeriod}
           >
@@ -34,7 +34,7 @@ export function Statistics({ project = false }: { project?: boolean }) {
           </Select>
         }
       />
-      <div className="grid four metrics">
+      <div className="layout-grid layout-grid--four metrics">
         {[
           ['Всего вопросов', total.toLocaleString('ru-RU'), '+18%'],
           ['Ответ найден', project ? '92%' : '89%', '+2%'],
@@ -42,29 +42,31 @@ export function Statistics({ project = false }: { project?: boolean }) {
           ['Помогло', '74%', '+4%'],
         ].map(([t, v, d]) => (
           <Panel key={t}>
-            <p className="small muted">{t}</p>
+            <p className="text text--small text--muted">{t}</p>
             <h2>{v}</h2>
             <Badge>{d}</Badge>
           </Panel>
         ))}
       </div>
-      <div className="stats-grid">
+      <div className="statistics__grid">
         <Panel>
           <h3>Динамика вопросов</h3>
-          <p className="small muted">Количество вопросов по дням · демонстрационные данные</p>
+          <p className="text text--small text--muted">
+            Количество вопросов по дням · демонстрационные данные
+          </p>
           <div className="chart">
-            <div className="chart-axis">
+            <div className="chart__axis">
               <span>300</span>
               <span>200</span>
               <span>100</span>
               <span>0</span>
             </div>
-            <div className="chart-bars">
+            <div className="chart__bars">
               {bars.map((b, i) => (
-                <div className="bar-column" key={i}>
-                  <div className="bar-track">
+                <div className="chart__column" key={i}>
+                  <div className="chart__track">
                     <div
-                      className="bar"
+                      className="chart__bar"
                       style={{ height: `${b / 3.2}%` }}
                       title={`${b} вопросов`}
                     />
@@ -74,22 +76,22 @@ export function Statistics({ project = false }: { project?: boolean }) {
               ))}
             </div>
           </div>
-          <div className="small muted text-right">
+          <div className="text text--small text--muted text--right">
             {period === '7' ? 'Дни недели' : 'Дни месяца'}
           </div>
         </Panel>
         <Panel>
           <h3>Качество ответов</h3>
-          <p className="small muted">Оценки пользователей за период</p>
-          <h2 className="hero-number">89%</h2>
-          <span className="small muted">ответов найдено в базе знаний</span>
+          <p className="text text--small text--muted">Оценки пользователей за период</p>
+          <h2 className="text text--hero-number">89%</h2>
+          <span className="text text--small text--muted">ответов найдено в базе знаний</span>
           {[
             ['Помогло', 74, 'var(--positive)'],
             ['Не помогло', 15, 'var(--accent)'],
             ['Без оценки', 11, 'var(--secondary)'],
           ].map(([t, n, color]) => (
-            <div className="quality-row" key={t}>
-              <div className="row between small">
+            <div className="statistics__quality" key={t}>
+              <div className="layout-row layout-row--between text text--small">
                 <span>{t}</span>
                 <b>{n}%</b>
               </div>
@@ -101,9 +103,9 @@ export function Statistics({ project = false }: { project?: boolean }) {
         </Panel>
       </div>
       {!project && (
-        <Panel className="table-panel">
+        <Panel className="data-table">
           <h3>Проекты</h3>
-          <div className="table-scroll">
+          <div className="data-table__scroll">
             <table>
               <thead>
                 <tr>
@@ -117,14 +119,14 @@ export function Statistics({ project = false }: { project?: boolean }) {
                 {projects.map((p, i) => (
                   <tr key={p.id}>
                     <td>
-                      <Link className="row" to={`/app/projects/${p.id}/analytics`}>
+                      <Link className="layout-row" to={`/app/projects/${p.id}/analytics`}>
                         <Avatar name={p.name} />
                         <span>{p.name}</span>
-                        <span className="small muted">{p.url}</span>
+                        <span className="text text--small text--muted">{p.url}</span>
                       </Link>
                     </td>
                     <td>{i ? 2234 : 1248}</td>
-                    <td className="positive">{i ? '87%' : '92%'}</td>
+                    <td className="text text--positive">{i ? '87%' : '92%'}</td>
                     <td>
                       <Link className="text-link" to={`/app/inbox?project=${p.id}`}>
                         {db.conversations.filter((c) => c.projectId === p.id && !c.answered).length}
@@ -137,7 +139,7 @@ export function Statistics({ project = false }: { project?: boolean }) {
           </div>
         </Panel>
       )}
-      <p className="small muted">
+      <p className="text text--small text--muted">
         График и проценты — демо-данные. Список неотвеченных вопросов связан с локальными диалогами.
       </p>
     </>
@@ -167,9 +169,9 @@ export function Inbox() {
         sub="Выберите диалог и ответьте пользователю прямо в этом окне"
         action={<Badge>{db.conversations.filter((c) => !c.answered).length} без ответа</Badge>}
       />
-      <div className={`inbox ${mobileChat ? 'show-chat' : ''}`}>
-        <section className="inbox-list">
-          <div className="row between">
+      <div className={`inbox ${mobileChat ? 'inbox--show-chat' : ''}`}>
+        <section className="inbox__list">
+          <div className="layout-row layout-row--between">
             <h3>Диалоги</h3>
             <Badge>{conversations.length} сообщений</Badge>
           </div>
@@ -191,20 +193,31 @@ export function Inbox() {
           </Select>
           <div className="filter-pills">
             <button
-              className={filter === 'unanswered' ? 'selected' : ''}
+              className={
+                filter === 'unanswered'
+                  ? 'filter-pills__button filter-pills__button--selected'
+                  : 'filter-pills__button'
+              }
               onClick={() => setFilter('unanswered')}
             >
               Без ответа
             </button>
-            <button className={filter === 'all' ? 'selected' : ''} onClick={() => setFilter('all')}>
+            <button
+              className={
+                filter === 'all'
+                  ? 'filter-pills__button filter-pills__button--selected'
+                  : 'filter-pills__button'
+              }
+              onClick={() => setFilter('all')}
+            >
               Все
             </button>
           </div>
-          <div className="dialog-list">
+          <div className="inbox__dialogs">
             {conversations.map((c) => (
               <button
                 key={c.id}
-                className={`dialog-row ${chosen?.id === c.id ? 'selected' : ''}`}
+                className={`inbox__dialog ${chosen?.id === c.id ? 'inbox__dialog--selected' : ''}`}
                 onClick={() => {
                   setSelected(c.id);
                   setMobileChat(true);
@@ -212,33 +225,35 @@ export function Inbox() {
               >
                 <Avatar name={db.projects.find((p) => p.id === c.projectId)?.name || 'П'} />
                 <div>
-                  <div className="row between">
+                  <div className="layout-row layout-row--between">
                     <b>{c.question}</b>
-                    <span className="tiny muted">{c.time}</span>
+                    <span className="text text--tiny text--muted">{c.time}</span>
                   </div>
-                  <p className="small muted">
+                  <p className="text text--small text--muted">
                     {c.answered ? 'Ответ отправлен' : 'Бот не нашёл ответ в базе знаний'}
                   </p>
-                  <span className="source tiny">
+                  <span className="source text text--tiny">
                     {db.projects.find((p) => p.id === c.projectId)?.name}
                   </span>
                 </div>
-                {!c.answered && <span className="unread" />}
+                {!c.answered && <span className="inbox__unread" />}
               </button>
             ))}
             {!conversations.length && (
               <Empty title="Вопросов нет">
-                <p className="small muted">Все сообщения обработаны или не подходят под фильтр</p>
+                <p className="text text--small text--muted">
+                  Все сообщения обработаны или не подходят под фильтр
+                </p>
               </Empty>
             )}
           </div>
         </section>
-        <section className="inbox-chat">
+        <section className="inbox__chat">
           {chosen ? (
             <>
-              <header className="chat-header">
+              <header className="inbox__header">
                 <button
-                  className="icon-button mobile-only"
+                  className="icon-button visibility visibility--mobile"
                   aria-label="Назад к диалогам"
                   onClick={() => setMobileChat(false)}
                 >
@@ -247,20 +262,20 @@ export function Inbox() {
                 <Avatar name={projectName} />
                 <div>
                   <h3>{chosen.question}</h3>
-                  <p className="small muted">
+                  <p className="text text--small text--muted">
                     {projectName} · Посетитель #{chosen.id.slice(-4)}
                   </p>
                 </div>
                 <Badge good={chosen.answered}>{chosen.answered ? 'Отвечено' : 'Без ответа'}</Badge>
               </header>
-              <div className="conversation inbox-conversation" aria-live="polite">
-                <span className="date-label">Сегодня</span>
+              <div className="conversation conversation--inbox" aria-live="polite">
+                <span className="conversation__date">Сегодня</span>
                 {chosen.messages.map((m) => (
                   <div
-                    className={`bubble ${m.role === 'admin' ? 'user' : m.role === 'bot' ? 'notice' : 'bot'}`}
+                    className={`bubble ${m.role === 'admin' ? 'bubble--user' : m.role === 'bot' ? 'bubble--notice' : 'bubble--bot'}`}
                     key={m.id}
                   >
-                    <span className="tiny muted">
+                    <span className="text text--tiny text--muted">
                       {m.role === 'visitor'
                         ? 'Посетитель'
                         : m.role === 'admin'
@@ -271,7 +286,7 @@ export function Inbox() {
                   </div>
                 ))}
                 {attachment && (
-                  <p className="small muted">
+                  <p className="text text--small text--muted">
                     <Paperclip size={14} />
                     {attachment}
                   </p>
@@ -339,7 +354,7 @@ export function Inbox() {
           )}
         </section>
       </div>
-      <p className="small muted">
+      <p className="text text--small text--muted">
         Демо: сообщения сохраняются локально. Отправка посетителю потребует подключения сервера.
       </p>
     </>
@@ -360,12 +375,12 @@ export function Partner() {
           'Сервер вызывает REST API агента',
           'Ответ возвращается в виджет посетителя',
         ].map((t, i) => (
-          <div className="check-row" key={t}>
+          <div className="checklist__row" key={t}>
             <span className="number">{i + 1}</span>
             {t}
           </div>
         ))}
-        <p className="muted">
+        <p className="text text--muted">
           Контракт API и серверные ключи согласуем с Go-командой. Секретный ключ не должен попадать
           в код браузера.
         </p>
@@ -384,11 +399,11 @@ export function Platform() {
         {db.transactions
           .filter((t) => t.text.toLowerCase().includes(search.toLowerCase()))
           .map((t) => (
-            <div className="document-progress" key={t.id}>
+            <div className="processing__document" key={t.id}>
               {t.text} · {t.date}
             </div>
           ))}
-        <p className="muted">
+        <p className="text text--muted">
           Полный серверный аудит и права platform-admin будут доступны после подключения API.
         </p>
       </Panel>

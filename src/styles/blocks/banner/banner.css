@@ -1,0 +1,41 @@
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--accent-soft);
+  border-radius: 20px;
+  padding: 22px 20px;
+  margin: 24px 0;
+}
+.banner > .button {
+  margin-left: auto;
+}
+.banner h3 {
+  font-size: 17px;
+}
+.banner p {
+  margin-bottom: 0;
+}
+@media (max-width: 760px) {
+  .banner {
+    flex-wrap: wrap;
+    padding: 18px;
+    gap: 12px;
+    margin: 20px 0;
+  }
+  .banner > .avatar {
+    width: 38px;
+    height: 38px;
+  }
+  .banner > div {
+    flex: 1;
+    min-width: 180px;
+  }
+  .banner h3 {
+    font-size: 15px;
+  }
+  .banner > .button {
+    margin: 6px 0 0 50px;
+    width: calc(100% - 50px);
+  }
+}

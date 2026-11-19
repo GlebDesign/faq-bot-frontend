@@ -34,7 +34,7 @@ test('регистрация, новый проект, знания, прове�
   await expect(page.getByRole('heading', { name: '8,4 / 10' })).toBeVisible();
   await page.getByRole('link', { name: 'Перейти к виджету', exact: true }).click();
   await page.getByLabel('Название бота').fill('Помощник Глеба');
-  await expect(page.locator('.widget-header')).toContainText('Помощник Глеба');
+  await expect(page.locator('.widget__header')).toContainText('Помощник Глеба');
   await page.getByRole('button', { name: 'Завершить настройку' }).click();
   await page.reload();
   await expect(page.getByLabel('Название бота')).toHaveValue('Помощник Глеба');
@@ -50,13 +50,13 @@ test('ответ в выбранном диалоге сохраняется п�
     .getByRole('textbox', { name: 'Ответ пользователю' })
     .fill('Мы свяжемся с вами сегодня.');
   await page.getByRole('button', { name: 'Отправить', exact: true }).click();
-  await expect(page.locator('.inbox-conversation')).toContainText('Мы свяжемся с вами сегодня.');
-  await expect(page.locator('.chat-header')).toContainText('Отвечено');
+  await expect(page.locator('.conversation--inbox')).toContainText('Мы свяжемся с вами сегодня.');
+  await expect(page.locator('.inbox__header')).toContainText('Отвечено');
   await page.waitForTimeout(300);
   await page.reload();
   await page.getByRole('button', { name: 'Все', exact: true }).click();
-  await page.locator('.dialog-row').first().click();
-  await expect(page.locator('.inbox-conversation')).toContainText('Мы свяжемся с вами сегодня.');
+  await page.locator('.inbox__dialog').first().click();
+  await expect(page.locator('.conversation--inbox')).toContainText('Мы свяжемся с вами сегодня.');
 });
 test('все экраны без ошибок и горизонтального переполнения на desktop и mobile', async ({
   page,
@@ -111,7 +111,7 @@ test('мобильный выбор диалога, возврат к списк
   await page.getByRole('link', { name: 'Общая статистика', exact: true }).click();
   await expect(page.locator('h1')).toHaveText('Общая статистика');
   await page.goto('/#/app/inbox');
-  await page.locator('.dialog-row').first().click();
+  await page.locator('.inbox__dialog').first().click();
   await expect(page.getByRole('textbox', { name: 'Ответ пользователю' })).toBeVisible();
   await page.getByRole('button', { name: 'Назад к диалогам' }).click();
   await expect(page.getByRole('heading', { name: 'Диалоги' })).toBeVisible();

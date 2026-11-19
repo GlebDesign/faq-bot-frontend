@@ -1,0 +1,40 @@
+.conversation--test {
+  height: 288px;
+  background: var(--shell);
+  border-radius: 16px;
+  padding: 16px;
+}
+.conversation {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.conversation--inbox {
+  flex: 1;
+  padding: 22px 28px;
+  background: var(--shell);
+  min-height: 0;
+}
+.conversation--inbox .bubble {
+  max-width: 82%;
+}
+.conversation__date {
+  align-self: center;
+  background: var(--muted);
+  font-size: 10px;
+  padding: 6px 20px;
+  border-radius: 30px;
+  color: var(--secondary);
+  margin-bottom: 10px;
+}
+@media (max-width: 760px) {
+  .conversation--test {
+    height: 360px;
+    padding: 12px;
+  }
+  .conversation--inbox {
+    padding: 18px;
+  }
+}

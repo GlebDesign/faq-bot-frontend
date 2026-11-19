@@ -1,0 +1,25 @@
+.hint-strip {
+  padding: 16px 20px;
+  margin: 24px 0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--muted);
+  border-radius: 14px;
+}
+.hint-strip p {
+  margin: 4px 0 0;
+}
+@media (max-width: 760px) {
+  .hint-strip {
+    padding: 16px;
+    margin: 20px 0;
+    gap: 12px;
+  }
+  .hint-strip b {
+    font-size: 12px;
+  }
+  .hint-strip p {
+    font-size: 11px;
+  }
+}

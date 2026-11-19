@@ -35,23 +35,26 @@ export function WidgetPreview({ config, live = false }: { config: WidgetConfig; 
     fontFamily: config.font,
   } as CSSProperties;
   return (
-    <div className="widget-preview" style={style}>
-      <div className="widget-header">
+    <div className="widget" style={style}>
+      <div className="widget__header">
         {config.avatar ? <img src={config.avatar} alt="" /> : <MessageSquare size={20} />}
         <span>{config.name}</span>
         <Badge good>Онлайн</Badge>
       </div>
-      <div className="widget-messages" aria-live="polite">
-        <div className="widget-bubble">{config.greeting}</div>
+      <div className="widget__messages" aria-live="polite">
+        <div className="widget__bubble">{config.greeting}</div>
         {messages.map((m) => (
-          <div key={m.id} className={`widget-bubble ${m.role === 'visitor' ? 'visitor' : ''}`}>
+          <div
+            key={m.id}
+            className={`widget__bubble ${m.role === 'visitor' ? 'widget__bubble--visitor' : ''}`}
+          >
             {m.text}
             {m.role === 'bot' && (
-              <div className="row feedback">
+              <div className="layout-row feedback">
                 {(['up', 'down'] as const).map((v) => (
                   <button
                     key={v}
-                    className={`icon-button ${m.feedback === v ? 'accent' : ''}`}
+                    className={`icon-button ${m.feedback === v ? 'text text--accent' : ''}`}
                     aria-label={v === 'up' ? 'Помогло' : 'Не помогло'}
                     onClick={() =>
                       setMessages((p) => p.map((x) => (x.id === m.id ? { ...x, feedback: v } : x)))
@@ -65,13 +68,13 @@ export function WidgetPreview({ config, live = false }: { config: WidgetConfig; 
           </div>
         ))}
         {live && messages.some((m) => m.role === 'bot' && !m.source) && !contact && !sent && (
-          <button className="text-link small" onClick={() => setContact(true)}>
+          <button className="text-link text text--small" onClick={() => setContact(true)}>
             Связаться со специалистом
           </button>
         )}
         {contact && (
           <form
-            className="widget-contact"
+            className="widget__contact"
             onSubmit={(e) => {
               e.preventDefault();
               const f = new FormData(e.currentTarget);
@@ -101,11 +104,15 @@ export function WidgetPreview({ config, live = false }: { config: WidgetConfig; 
             <Button>Оставить заявку</Button>
           </form>
         )}
-        {sent && <p className="positive small">Заявка передана компании. Мы свяжемся с вами.</p>}
+        {sent && (
+          <p className="text text--positive text--small">
+            Заявка передана компании. Мы свяжемся с вами.
+          </p>
+        )}
         <div ref={end} />
       </div>
       <form
-        className="widget-composer"
+        className="widget__composer"
         onSubmit={(e) => {
           e.preventDefault();
           const form = e.currentTarget;
@@ -162,17 +169,19 @@ export function WidgetPage() {
         title="Виджет и подключение"
         sub="Настройте внешний вид и выберите способ подключения к сайту"
       />
-      <div className="widget-settings-grid">
+      <div className="widget-settings">
         <Panel>
           <h3>Настройки виджета</h3>
-          <p className="small muted">Изменения сразу отображаются в предпросмотре</p>
-          <div className="grid two widget-fields">
+          <p className="text text--small text--muted">
+            Изменения сразу отображаются в предпросмотре
+          </p>
+          <div className="layout-grid layout-grid--two widget-settings__fields">
             <div>
               <h4>Содержание</h4>
-              <div className="row">
+              <div className="layout-row">
                 <span className="avatar">
                   {config.avatar ? (
-                    <img className="avatar-image" src={config.avatar} alt="Аватар бота" />
+                    <img className="avatar__image" src={config.avatar} alt="Аватар бота" />
                   ) : (
                     'A'
                   )}
@@ -231,7 +240,7 @@ export function WidgetPage() {
             </div>
             <div>
               <h4>Оформление</h4>
-              <div className="grid two colors">
+              <div className="layout-grid layout-grid--two widget-settings__colors">
                 {(
                   [
                     ['color', 'Основной цвет'],
@@ -303,11 +312,11 @@ export function WidgetPage() {
             </div>
           </div>
         </Panel>
-        <div className="stack">
+        <div className="layout-stack">
           <Panel>
             <h3>Предпросмотр</h3>
-            <p className="small muted">Виджет на сайте · интерактивное демо</p>
-            <div className="preview-stage">
+            <p className="text text--small text--muted">Виджет на сайте · интерактивное демо</p>
+            <div className="widget-settings__preview">
               <WidgetPreview config={config} />
               <div
                 style={{
@@ -317,7 +326,7 @@ export function WidgetPage() {
                 }}
               >
                 <span
-                  className="widget-launch"
+                  className="widget__launch"
                   style={{
                     background: config.color,
                     borderRadius: config.shape === 'round' ? 40 : 10,
@@ -332,11 +341,22 @@ export function WidgetPage() {
           <Panel>
             <h3>Подключение</h3>
             <div className="filter-pills">
-              <button className={tab === 'code' ? 'selected' : ''} onClick={() => setTab('code')}>
+              <button
+                className={
+                  tab === 'code'
+                    ? 'filter-pills__button filter-pills__button--selected'
+                    : 'filter-pills__button'
+                }
+                onClick={() => setTab('code')}
+              >
                 Код на сайт
               </button>
               <button
-                className={tab === 'partner' ? 'selected' : ''}
+                className={
+                  tab === 'partner'
+                    ? 'filter-pills__button filter-pills__button--selected'
+                    : 'filter-pills__button'
+                }
                 onClick={() => setTab('partner')}
               >
                 API партнёра
@@ -345,18 +365,18 @@ export function WidgetPage() {
             {tab === 'code' ? (
               <>
                 <pre className="code">{code}</pre>
-                <Button variant="secondary" className="full" onClick={copy}>
+                <Button variant="secondary" className="button--full" onClick={copy}>
                   <Copy size={16} />
                   Скопировать
                 </Button>
-                <p className="small muted">
+                <p className="text text--small text--muted">
                   Локальный код для тестирования. Публичный домен и серверный конфиг нужны для
                   установки на реальный сайт.
                 </p>
               </>
             ) : (
               <>
-                <p className="small muted">
+                <p className="text text--small text--muted">
                   Запросы из собственного виджета проходят через сервер партнёра.
                 </p>
                 <Link className="text-link" to="/app/partner">
@@ -365,7 +385,7 @@ export function WidgetPage() {
               </>
             )}
             <Button
-              className="full"
+              className="button--full"
               onClick={() => {
                 update((d) => {
                   d.widgets[id!] = { ...config, published: true };
@@ -381,7 +401,11 @@ export function WidgetPage() {
               <Check size={16} />
               Завершить настройку
             </Button>
-            <Link className="button secondary full" to={`/widget-demo/${id}`} target="_blank">
+            <Link
+              className="button button--secondary button--full"
+              to={`/widget-demo/${id}`}
+              target="_blank"
+            >
               Открыть внешний виджет
             </Link>
           </Panel>
@@ -408,25 +432,25 @@ export function WidgetDemo() {
     }
   }, [embedded, id]);
   return (
-    <div className={embedded ? 'embedded-widget' : 'external-demo'}>
+    <div className={embedded ? 'widget-demo widget-demo--embedded' : 'widget-demo'}>
       {!embedded && (
         <>
           <BrandDemo />
           <h1>Пример сайта клиента</h1>
-          <p className="muted">Тестовое окружение для проверки отдельного виджета</p>
+          <p className="text text--muted">Тестовое окружение для проверки отдельного виджета</p>
           <Link to="/app">Вернуться в кабинет</Link>
         </>
       )}
       {open ? (
         <div
-          className="floating-widget"
+          className="widget-demo__window"
           style={{
             [config.position === 'right' ? 'right' : 'left']: embedded ? 0 : config.offset,
             bottom: embedded ? 0 : config.offset,
           }}
         >
           <button
-            className="widget-close"
+            className="widget-demo__close"
             aria-label="Закрыть виджет"
             onClick={() => {
               if (embedded) {
@@ -441,7 +465,7 @@ export function WidgetDemo() {
         </div>
       ) : (
         <button
-          className="widget-launch floating-launch"
+          className="widget__launch widget__launch--floating"
           style={{
             background: config.color,
             borderRadius: config.shape === 'round' ? 40 : 10,
@@ -459,5 +483,5 @@ export function WidgetDemo() {
   );
 }
 function BrandDemo() {
-  return <div className="eyebrow">DEMO SITE / FAQ BOT</div>;
+  return <div className="text text--eyebrow">DEMO SITE / FAQ BOT</div>;
 }

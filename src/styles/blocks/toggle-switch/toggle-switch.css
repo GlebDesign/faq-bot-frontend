@@ -1,0 +1,28 @@
+.toggle-switch {
+  width: 48px;
+  height: 28px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  background: #e7e7e5;
+  padding: 4px;
+  transition: background-color 160ms;
+}
+.toggle-switch span {
+  display: block;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 160ms;
+}
+.toggle-switch[aria-checked='true'] {
+  background: var(--accent);
+}
+.toggle-switch[aria-checked='true'] span {
+  transform: translateX(20px);
+}
+@media (hover: hover) and (pointer: fine) {
+  .toggle-switch:hover {
+    box-shadow: 0 0 0 4px #17171408;
+  }
+}

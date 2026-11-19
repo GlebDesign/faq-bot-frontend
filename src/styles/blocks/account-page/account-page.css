@@ -1,0 +1,33 @@
+.account-page > .page-heading {
+  min-height: 60px;
+  margin: 24px 0;
+}
+.account-page h1,
+.account-page h2 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.account-page .page-heading p {
+  margin-top: 4px;
+  line-height: 20px;
+}
+.account-page .panel {
+  margin-top: 0;
+  padding: 20px;
+}
+@media (max-width: 760px) {
+  .account-page > .page-heading {
+    min-height: auto;
+    margin: 24px 0 20px;
+  }
+  .account-page h1,
+  .account-page h2 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+  .account-page .panel {
+    padding: 18px;
+  }
+}

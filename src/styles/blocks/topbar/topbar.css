@@ -1,0 +1,85 @@
+.topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.topbar__breadcrumb {
+  font-size: 13px;
+}
+.topbar__actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.topbar__balance {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.topbar__actions > .icon-button {
+  height: 44px;
+  width: 44px;
+}
+.topbar__avatar {
+  width: 62px !important;
+}
+@media (max-width: 1000px) {
+  .topbar__actions .topbar__create-project span {
+    display: none;
+  }
+  .topbar__create-project {
+    padding: 12px;
+  }
+  .topbar__avatar {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .topbar {
+    height: 60px;
+    margin-bottom: 14px;
+    gap: 8px;
+  }
+  .topbar__breadcrumb {
+    display: none;
+  }
+  .topbar__actions {
+    gap: 6px;
+  }
+  .topbar__actions > .icon-button {
+    width: 36px;
+    height: 38px;
+  }
+  .topbar__balance {
+    font-size: 12px;
+    padding: 10px;
+    gap: 7px;
+  }
+  .topbar__avatar {
+    display: none !important;
+  }
+  .topbar__create-project {
+    min-height: 38px;
+    padding: 10px;
+  }
+}
+.topbar__balance {
+  transition:
+    background-color 160ms,
+    color 160ms,
+    box-shadow 160ms,
+    transform 160ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .topbar__balance:hover {
+    background-color: #ecece9;
+  }
+}

@@ -1,0 +1,68 @@
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  padding: 16px 20px;
+  border-radius: 20px;
+  margin: 18px 0 28px;
+  gap: 16px;
+}
+.steps a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  flex: 1;
+  justify-content: center;
+}
+.steps b {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--muted);
+  color: var(--secondary);
+}
+.steps .steps__number--selected {
+  background: var(--accent);
+  color: white;
+}
+@media (max-width: 1000px) {
+  .steps {
+    gap: 8px;
+  }
+  .steps > span {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .steps {
+    padding: 12px;
+    margin: 16px 0 24px;
+    border-radius: 14px;
+  }
+  .steps a {
+    gap: 7px;
+    font-size: 11px;
+  }
+  .steps b {
+    width: 25px;
+    height: 25px;
+    font-size: 11px;
+  }
+}
+.steps a {
+  transition:
+    background-color 160ms,
+    color 160ms,
+    box-shadow 160ms,
+    transform 160ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .steps a:hover {
+    color: var(--accent);
+  }
+}

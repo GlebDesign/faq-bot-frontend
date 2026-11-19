@@ -1,0 +1,16 @@
+.attention > .layout-row {
+  margin: 20px 0;
+}
+.attention .text-link {
+  display: inline-block;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
+  margin-top: 12px;
+  width: 100%;
+  font-size: 13px;
+}
+@media (max-width: 1000px) {
+  .attention {
+    display: none;
+  }
+}

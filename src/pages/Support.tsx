@@ -17,7 +17,7 @@ const ticketNumber = (t: Ticket) => (t.number ? `#${t.number}` : `#${t.id.slice(
 function TicketStatus({ ticket }: { ticket: Ticket }) {
   return (
     <span
-      className={`ticket-status ${isClosed(ticket) ? 'resolved' : ticket.status === 'В работе' ? 'in-progress' : 'new'}`}
+      className={`ticket-status ${isClosed(ticket) ? 'ticket-status--resolved' : ticket.status === 'В работе' ? 'ticket-status--in-progress' : 'ticket-status--new'}`}
     >
       {ticket.status}
     </span>
@@ -57,7 +57,7 @@ export function Support() {
       : [];
 
   return (
-    <div className="account-page support-page">
+    <div className="account-page support">
       <Heading
         title="Поддержка"
         sub="Заявки, ответы команды и история обращений"
@@ -73,11 +73,13 @@ export function Support() {
           </Button>
         }
       />
-      <div className={`support-workspace ${mobileDetails && chosen ? 'show-details' : ''}`}>
-        <Panel className="support-list-panel">
-          <div className="support-list-heading">
+      <div
+        className={`support__workspace ${mobileDetails && chosen ? 'support__workspace--show-details' : ''}`}
+      >
+        <Panel className="support__list">
+          <div className="support__heading">
             <h2>Мои заявки</h2>
-            <span className="muted">{db.tickets.length}</span>
+            <span className="text text--muted">{db.tickets.length}</span>
           </div>
           <SearchField
             value={search}
@@ -96,7 +98,11 @@ export function Support() {
               <button
                 key={value}
                 type="button"
-                className={filter === value ? 'selected' : ''}
+                className={
+                  filter === value
+                    ? 'filter-pills__button filter-pills__button--selected'
+                    : 'filter-pills__button'
+                }
                 aria-pressed={filter === value}
                 onClick={() => {
                   setFilter(value);
@@ -107,8 +113,8 @@ export function Support() {
               </button>
             ))}
           </div>
-          <div className="support-ticket-list">
-            <div className="support-table-heading" aria-hidden="true">
+          <div className="support__tickets">
+            <div className="support__table-heading" aria-hidden="true">
               <span>Заявка</span>
               <span>Статус</span>
               <span>Обновлено</span>
@@ -117,7 +123,7 @@ export function Support() {
               <button
                 type="button"
                 key={t.id}
-                className={`support-ticket-row ${chosen?.id === t.id ? 'selected' : ''}`}
+                className={`support__ticket ${chosen?.id === t.id ? 'support__ticket--selected' : ''}`}
                 aria-label={`${t.title} · ${projectName(t)} · ${t.status}`}
                 aria-pressed={chosen?.id === t.id}
                 onClick={() => {
@@ -125,19 +131,19 @@ export function Support() {
                   setMobileDetails(true);
                 }}
               >
-                <span className="support-ticket-copy">
+                <span className="support__ticket-copy">
                   <strong>{t.title}</strong>
-                  <span className="small muted">
+                  <span className="text text--small text--muted">
                     {ticketNumber(t)} · {projectName(t)}
                   </span>
                 </span>
                 <TicketStatus ticket={t} />
-                <span className="support-ticket-updated">{t.updated || t.created}</span>
+                <span className="support__updated">{t.updated || t.created}</span>
               </button>
             ))}
             {!tickets.length && (
               <Empty title={search || filter !== 'all' ? 'Ничего не найдено' : 'Заявок пока нет'}>
-                <p className="small muted">
+                <p className="text text--small text--muted">
                   {search || filter !== 'all'
                     ? 'Попробуйте другой запрос или сбросьте фильтры.'
                     : 'Создайте заявку, чтобы обратиться в поддержку.'}
@@ -156,25 +162,25 @@ export function Support() {
               </Empty>
             )}
           </div>
-          <p className="support-list-footer small muted">
+          <p className="support__footer text text--small text--muted">
             Показано {tickets.length} из {db.tickets.length} заявок
           </p>
         </Panel>
-        <Panel className="support-details-panel">
+        <Panel className="support__details">
           {chosen ? (
-            <div key={chosen.id} className="support-details-content">
-              <button className="support-back text-link" onClick={() => setMobileDetails(false)}>
+            <div key={chosen.id} className="support__content">
+              <button className="support__back text-link" onClick={() => setMobileDetails(false)}>
                 <ArrowLeft size={18} />К заявкам
               </button>
-              <div className="ticket-topline">
-                <strong className="muted">{ticketNumber(chosen)}</strong>
+              <div className="support__topline">
+                <strong className="text text--muted">{ticketNumber(chosen)}</strong>
                 <TicketStatus ticket={chosen} />
               </div>
-              <div className="ticket-heading">
+              <div className="support__ticket-heading">
                 <h2>{chosen.title}</h2>
-                <p className="muted">{chosen.category}</p>
+                <p className="text text--muted">{chosen.category}</p>
               </div>
-              <dl className="ticket-metadata">
+              <dl className="support__metadata">
                 <div>
                   <dt>Проект:</dt>
                   <dd>{projectName(chosen)}</dd>
@@ -184,12 +190,12 @@ export function Support() {
                   <dd>{chosen.created}</dd>
                 </div>
               </dl>
-              <div className="ticket-description">
+              <div className="support__description">
                 <h3>Описание</h3>
-                <p className="pre-wrap">{chosen.description}</p>
+                <p className="text text--pre-wrap">{chosen.description}</p>
               </div>
               {chosen.attachment && (
-                <div className="support-attachment">
+                <div className="support__attachment">
                   <Paperclip size={20} />
                   <span>
                     {chosen.attachment}
@@ -199,7 +205,7 @@ export function Support() {
                   </span>
                 </div>
               )}
-              <div className="support-history">
+              <div className="support__history">
                 <h3>История заявки</h3>
                 <ol className="ticket-timeline">
                   {events.map((event, i) => (
@@ -207,14 +213,14 @@ export function Support() {
                       key={`${i}-${event.date}`}
                       className={
                         i === events.length - 1 && event.title === 'Ответ поддержки'
-                          ? 'support-reply'
+                          ? 'ticket-timeline__item ticket-timeline__item--reply'
                           : ''
                       }
                     >
                       <div>
-                        <time className="small muted">{event.date}</time>
+                        <time className="text text--small text--muted">{event.date}</time>
                         <strong>{event.title}</strong>
-                        <p className="muted">{event.body}</p>
+                        <p className="text text--muted">{event.body}</p>
                       </div>
                     </li>
                   ))}
@@ -223,7 +229,9 @@ export function Support() {
             </div>
           ) : (
             <Empty title="Выберите заявку">
-              <p className="small muted">Здесь появятся описание и история обращения.</p>
+              <p className="text text--small text--muted">
+                Здесь появятся описание и история обращения.
+              </p>
             </Empty>
           )}
         </Panel>
@@ -310,9 +318,11 @@ export function Support() {
               </Select>
             </label>
             <Field label="Вложение (до 25 МБ)" name="attachment" type="file" />
-            <p className="small muted">Демо: заявка и имя вложения сохраняются в этом браузере.</p>
+            <p className="text text--small text--muted">
+              Демо: заявка и имя вложения сохраняются в этом браузере.
+            </p>
             {formError && (
-              <p className="error" role="alert">
+              <p className="text text--error" role="alert">
                 {formError}
               </p>
             )}

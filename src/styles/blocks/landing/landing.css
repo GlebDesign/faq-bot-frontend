@@ -1,0 +1,63 @@
+.landing {
+  background: var(--shell);
+  min-height: 100vh;
+  padding: 32px 6%;
+}
+.landing header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.landing > section {
+  max-width: 1100px;
+  margin: 100px auto 60px;
+  text-align: center;
+}
+.landing h1 {
+  font-size: 58px;
+  margin: 28px 0;
+}
+.landing > section > p {
+  font-size: 18px;
+  line-height: 1.8;
+}
+.landing > section > .button {
+  margin: 22px 0 64px;
+}
+.landing .panel {
+  text-align: left;
+  padding: 30px;
+}
+.landing .panel h3 {
+  margin-top: 20px;
+}
+.landing footer {
+  text-align: center;
+}
+@media (max-width: 760px) {
+  .landing {
+    padding: 24px;
+  }
+  .landing header .brand {
+    font-size: 21px;
+  }
+  .landing header .layout-row {
+    gap: 12px;
+  }
+  .landing header .button {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+  .landing > section {
+    margin-top: 70px;
+  }
+  .landing h1 {
+    font-size: 37px;
+  }
+  .landing > section > p {
+    font-size: 15px;
+  }
+  .landing .panel {
+    padding: 24px;
+  }
+}

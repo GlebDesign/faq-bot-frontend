@@ -42,7 +42,7 @@ export function ProjectForm({ project, onClose }: { project?: Project; onClose: 
           if (!project) navigate(`/app/projects/${id}/sources`);
         }}
       >
-        <p className="muted">
+        <p className="text text--muted">
           Проект — это отдельный сайт или клиент, для которого будет работать FAQ-бот
         </p>
         <Field
@@ -59,8 +59,8 @@ export function ProjectForm({ project, onClose }: { project?: Project; onClose: 
           defaultValue={project?.url}
           placeholder="https://acme.ru"
         />
-        <p className="small muted">Данные проекта можно изменить позже</p>
-        <div className="grid two">
+        <p className="text text--small text--muted">Данные проекта можно изменить позже</p>
+        <div className="layout-grid layout-grid--two">
           <Button type="button" variant="secondary" onClick={onClose}>
             Отмена
           </Button>
@@ -85,21 +85,21 @@ export function Dashboard() {
         sub="Управляйте проектами и следите за качеством ответов"
       />
       <div className="banner">
-        <span className="avatar white">
+        <span className="avatar avatar--white">
           <MessageSquare size={20} />
         </span>
         <div>
           <h3>{unanswered} вопросов без ответа</h3>
-          <p className="muted small">
+          <p className="text text--muted text--small">
             Добавьте материалы в базу знаний, чтобы улучшить ответы агентов
           </p>
         </div>
-        <Link className="button primary" to="/app/inbox">
+        <Link className="button button--primary" to="/app/inbox">
           Перейти к вопросам <ArrowRight size={16} />
         </Link>
       </div>
       <Heading title="Мои проекты" sub={`${db.projects.length} проекта`} />
-      <div className="dashboard-grid">
+      <div className="dashboard__grid">
         <Panel className="project-list">
           {db.projects.length === 0 && (
             <Empty title="Создайте первый проект">
@@ -110,15 +110,15 @@ export function Dashboard() {
             </Empty>
           )}
           {db.projects.map((p) => (
-            <div className="project-row" key={p.id}>
-              <div className="row">
+            <div className="project-list__row" key={p.id}>
+              <div className="layout-row">
                 <Avatar name={p.name} />
                 <div>
                   <h3>{p.name}</h3>
-                  <span className="small muted">{p.url || 'Сайт не указан'}</span>
+                  <span className="text text--small text--muted">{p.url || 'Сайт не указан'}</span>
                 </div>
                 <Badge good={p.active}>{p.active ? 'Активен' : 'Нужно настроить'}</Badge>
-                <div className="project-menu">
+                <div className="project-list__menu">
                   <button
                     className="icon-button"
                     aria-label={`Действия ${p.name}`}
@@ -150,29 +150,29 @@ export function Dashboard() {
                   )}
                 </div>
               </div>
-              <div className="row project-metrics">
+              <div className="layout-row project-list__metrics">
                 {p.active ? (
                   <>
                     <div>
                       <strong>92%</strong>
-                      <p className="small muted">ответов найдено</p>
+                      <p className="text text--small text--muted">ответов найдено</p>
                     </div>
                     <div>
                       <strong>
                         {db.conversations.filter((c) => c.projectId === p.id && !c.answered).length}
                       </strong>
-                      <p className="small muted">без ответа</p>
+                      <p className="text text--small text--muted">без ответа</p>
                     </div>
                   </>
                 ) : (
-                  <div className="row setup-progress">
-                    <span className="small">Настройка</span>
+                  <div className="layout-row project-list__progress">
+                    <span className="text text--small">Настройка</span>
                     <Progress value={p.progress} />
                     <b>{p.progress}%</b>
                   </div>
                 )}
                 <Link
-                  className={`button ${p.active ? 'dark' : 'secondary'}`}
+                  className={`button ${p.active ? 'button--dark' : 'button--secondary'}`}
                   to={`/app/projects/${p.id}${p.active ? '' : '/sources'}`}
                 >
                   {p.active ? 'Открыть проект' : 'Продолжить настройку'}
@@ -184,11 +184,11 @@ export function Dashboard() {
         {unfinished && (
           <Panel className="attention">
             <h2>Требует внимания</h2>
-            <div className="row">
+            <div className="layout-row">
               <Avatar name={unfinished.name} />
               <div>
                 <h3>{unfinished.name}</h3>
-                <span className="small muted">{unfinished.url}</span>
+                <span className="text text--small text--muted">{unfinished.url}</span>
               </div>
             </div>
             {[
@@ -197,8 +197,10 @@ export function Dashboard() {
               'Настроить виджет',
               'Подключить к сайту',
             ].map((t, i) => (
-              <div className={`check-row ${i > 1 ? 'muted' : ''}`} key={t}>
-                <span className={`check-dot ${i === 0 ? 'done' : i === 1 ? 'current' : ''}`}>
+              <div className={`checklist__row ${i > 1 ? 'text text--muted' : ''}`} key={t}>
+                <span
+                  className={`checklist__dot ${i === 0 ? 'checklist__dot--done' : i === 1 ? 'checklist__dot--current' : ''}`}
+                >
                   {i === 0 ? <Check size={15} /> : i === 1 ? '•' : ''}
                 </span>
                 {t}
@@ -214,7 +216,7 @@ export function Dashboard() {
         <Plus size={20} />
         <div>
           <b>Новый проект — отдельный сайт или клиент</b>
-          <p className="small muted">
+          <p className="text text--small text--muted">
             Создайте агента, загрузите материалы и подключите готовый виджет.
           </p>
         </div>
@@ -226,7 +228,7 @@ export function Dashboard() {
             Проект «{deleting.name}» и его демонстрационные материалы будут удалены из этого
             браузера.
           </p>
-          <div className="row end">
+          <div className="layout-row layout-row--end">
             <Button variant="secondary" onClick={() => setDeleting(undefined)}>
               Отмена
             </Button>
@@ -260,28 +262,28 @@ export function Overview() {
   return (
     <>
       <Heading title="Обзор проекта" sub="Ключевая информация и быстрые действия по проекту" />
-      <div className="grid two">
+      <div className="layout-grid layout-grid--two">
         <Panel>
-          <div className="row">
+          <div className="layout-row">
             <Avatar name="Б" />
             <h3>База знаний</h3>
           </div>
-          <h2 className="large-number">{docs.length} материала</h2>
-          <div className="row between">
-            <span className="small muted">Источники информации вашего агента</span>
+          <h2 className="text text--large-number">{docs.length} материала</h2>
+          <div className="layout-row layout-row--between">
+            <span className="text text--small text--muted">Источники информации вашего агента</span>
             <Link className="text-link" to="materials">
               Открыть базу →
             </Link>
           </div>
         </Panel>
         <Panel>
-          <div className="row">
+          <div className="layout-row">
             <Avatar name="В" />
             <h3>Виджет</h3>
           </div>
-          <h2 className="large-number">{p.active ? '● Активен' : 'Не подключён'}</h2>
-          <div className="row between">
-            <span className="small muted">{p.url}</span>
+          <h2 className="text text--large-number">{p.active ? '● Активен' : 'Не подключён'}</h2>
+          <div className="layout-row layout-row--between">
+            <span className="text text--small text--muted">{p.url}</span>
             <Button
               variant="secondary"
               onClick={() => {
@@ -297,31 +299,33 @@ export function Overview() {
         </Panel>
       </div>
       <div className="banner">
-        <Avatar name="?" className="white" />
+        <Avatar name="?" className="avatar--white" />
         <div>
           <h3>{count} вопросов без ответа</h3>
-          <p className="small muted">Добавьте материалы, чтобы улучшить ответы агента</p>
+          <p className="text text--small text--muted">
+            Добавьте материалы, чтобы улучшить ответы агента
+          </p>
         </div>
-        <Link className="button primary" to={`/app/inbox?project=${id}`}>
+        <Link className="button button--primary" to={`/app/inbox?project=${id}`}>
           Посмотреть вопросы
         </Link>
       </div>
-      <h3 className="section-label">Быстрые действия</h3>
-      <div className="grid three">
+      <h3 className="text text--section-label">Быстрые действия</h3>
+      <div className="layout-grid layout-grid--three">
         {[
           ['+', 'Добавить материалы', 'Загрузить файл, текст или медиа', 'sources'],
           ['П', 'Проверить ответы', 'Ручная и автоматическая проверка', 'test'],
           ['В', 'Настроить виджет', 'Изменить вид и подключение', 'widget'],
         ].map(([icon, t, d, path]) => (
           <Panel key={path}>
-            <div className="row">
+            <div className="layout-row">
               <Avatar name={icon} />
               <div>
                 <h3>{t}</h3>
-                <p className="small muted">{d}</p>
+                <p className="text text--small text--muted">{d}</p>
               </div>
             </div>
-            <Link className="text-link card-link" to={path}>
+            <Link className="text-link panel__link" to={path}>
               Открыть →
             </Link>
           </Panel>

@@ -60,39 +60,39 @@ export function Select({
           ref={trigger}
           id={id ?? generatedId}
           aria-label={ariaLabel}
-          className={`select-trigger ${className}`}
+          className={`select__trigger ${className}`}
         >
           <SelectPrimitive.Value />
-          <SelectPrimitive.Icon className="select-chevron">
+          <SelectPrimitive.Icon className="select__chevron">
             <ChevronDown size={16} strokeWidth={1.7} />
           </SelectPrimitive.Icon>
         </SelectPrimitive.Trigger>
         <SelectPrimitive.Portal container={container}>
           <SelectPrimitive.Content
-            className="select-content"
+            className="select__content"
             position="popper"
             sideOffset={6}
             collisionPadding={12}
           >
-            <SelectPrimitive.ScrollUpButton className="select-scroll">
+            <SelectPrimitive.ScrollUpButton className="select__scroll">
               <ChevronUp size={14} />
             </SelectPrimitive.ScrollUpButton>
-            <SelectPrimitive.Viewport className="select-viewport">
+            <SelectPrimitive.Viewport className="select__viewport">
               {options.map((option) => (
                 <SelectPrimitive.Item
                   key={option.value}
                   value={toInternal(option.value)}
                   disabled={option.disabled}
-                  className="select-option"
+                  className="select__option"
                 >
                   <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
-                  <SelectPrimitive.ItemIndicator className="select-check">
+                  <SelectPrimitive.ItemIndicator className="select__check">
                     <Check size={15} />
                   </SelectPrimitive.ItemIndicator>
                 </SelectPrimitive.Item>
               ))}
             </SelectPrimitive.Viewport>
-            <SelectPrimitive.ScrollDownButton className="select-scroll">
+            <SelectPrimitive.ScrollDownButton className="select__scroll">
               <ChevronDown size={14} />
             </SelectPrimitive.ScrollDownButton>
           </SelectPrimitive.Content>
@@ -119,7 +119,7 @@ export function Button({
   children: ReactNode;
 }) {
   return (
-    <button {...props} className={`button ${variant} ${className}`}>
+    <button {...props} className={`button button--${variant} ${className}`}>
       {children}
     </button>
   );
@@ -136,7 +136,7 @@ export function Field({
   );
 }
 export function Badge({ children, good = false }: { children: ReactNode; good?: boolean }) {
-  return <span className={`badge ${good ? 'good' : ''}`}>{children}</span>;
+  return <span className={`badge ${good ? 'badge--good' : ''}`}>{children}</span>;
 }
 export function Panel({ children, className = '' }: { children: ReactNode; className?: string }) {
   return <section className={`panel ${className}`}>{children}</section>;
@@ -155,7 +155,7 @@ export function Heading({
     <div className="page-heading">
       <div>
         <Title>{title}</Title>
-        {sub && <p className="muted">{sub}</p>}
+        {sub && <p className="text text--muted">{sub}</p>}
       </div>
       {action}
     </div>
@@ -217,7 +217,7 @@ export function Modal({
       }}
     >
       <div className="modal">
-        <div className="row between">
+        <div className="layout-row layout-row--between">
           <h2>{title}</h2>
           <button className="icon-button" onClick={onClose} aria-label="Закрыть">
             <X size={18} />
@@ -253,7 +253,7 @@ export function Avatar({
 }) {
   return (
     <span className={`avatar ${className}`}>
-      {src ? <img className="avatar-image" src={src} alt="" /> : name.slice(0, 1).toUpperCase()}
+      {src ? <img className="avatar__image" src={src} alt="" /> : name.slice(0, 1).toUpperCase()}
     </span>
   );
 }

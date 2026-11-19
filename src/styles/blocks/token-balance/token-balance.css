@@ -1,0 +1,21 @@
+.token-balance {
+  max-width: 650px;
+  padding: 28px;
+}
+.token-balance h2 {
+  font-size: 40px;
+  margin: 12px 0;
+}
+.token-balance h2 span {
+  font-size: 16px;
+  color: var(--secondary);
+  font-weight: 400;
+}
+.token-balance svg {
+  color: var(--accent);
+}
+@media (max-width: 760px) {
+  .token-balance h2 {
+    font-size: 34px;
+  }
+}

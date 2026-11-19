@@ -49,22 +49,28 @@ export function Testing() {
         title="Проверка ответов"
         sub="Проверьте ответы вручную или запустите автоматический тест из 10 вопросов"
       />
-      <div className="test-grid">
-        <Panel className="test-chat">
-          <div className="row between">
+      <div className="testing__grid">
+        <Panel className="testing__chat">
+          <div className="layout-row layout-row--between">
             <div>
               <h3>Тестовый чат</h3>
-              <p className="small muted">Проверьте несколько типовых вопросов</p>
+              <p className="text text--small text--muted">Проверьте несколько типовых вопросов</p>
             </div>
-            <Link className="button primary compact" to={`/app/projects/${id}/auto-check`}>
+            <Link
+              className="button button--primary button--compact"
+              to={`/app/projects/${id}/auto-check`}
+            >
               Автопроверка
             </Link>
           </div>
-          <div className="conversation test-conversation" aria-live="polite">
+          <div className="conversation conversation--test" aria-live="polite">
             {messages.map((m) => (
-              <div key={m.id} className={`bubble ${m.role === 'visitor' ? 'user' : 'bot'}`}>
+              <div
+                key={m.id}
+                className={`bubble ${m.role === 'visitor' ? 'bubble--user' : 'bubble--bot'}`}
+              >
                 {m.role === 'bot' && (
-                  <b className="small">{db.projects.find((p) => p.id === id)?.name}</b>
+                  <b className="text text--small">{db.projects.find((p) => p.id === id)?.name}</b>
                 )}
                 <p>{m.text}</p>
                 {m.source && (
@@ -73,10 +79,10 @@ export function Testing() {
                   </button>
                 )}
                 {m.role === 'bot' && (
-                  <div className="row feedback">
+                  <div className="layout-row feedback">
                     {(['up', 'down'] as const).map((v) => (
                       <button
-                        className={`icon-button ${m.feedback === v ? 'accent' : ''}`}
+                        className={`icon-button ${m.feedback === v ? 'text text--accent' : ''}`}
                         key={v}
                         aria-label={v === 'up' ? 'Помогло' : 'Не помогло'}
                         onClick={() => {
@@ -93,7 +99,11 @@ export function Testing() {
                 )}
               </div>
             ))}
-            {busy && <span className="small muted">Агент готовит демонстрационный ответ…</span>}
+            {busy && (
+              <span className="text text--small text--muted">
+                Агент готовит демонстрационный ответ…
+              </span>
+            )}
             <div ref={last} />
           </div>
           <form
@@ -126,31 +136,36 @@ export function Testing() {
               <span>Отправить</span>
             </Button>
           </form>
-          <p className="small muted">
+          <p className="text text--small text--muted">
             Демо-ответы по возврату и доставке. ИИ будет подключён через API.
           </p>
         </Panel>
         <Panel>
           <h3>Проверьте качество</h3>
-          <p className="small muted">Перед переходом к виджету убедитесь, что:</p>
+          <p className="text text--small text--muted">Перед переходом к виджету убедитесь, что:</p>
           <div className="checklist">
             {[
               'Ответ соответствует вопросу',
               'Формулировка понятна',
               'Источник указан корректно',
             ].map((t) => (
-              <div className="row" key={t}>
+              <div className="layout-row" key={t}>
                 <Check size={17} />
                 {t}
               </div>
             ))}
           </div>
           <h3>Ответы устраивают?</h3>
-          <p className="small muted">Если нет — дополните материалы и повторите обработку.</p>
-          <Link className="button primary full" to={`/app/projects/${id}/widget`}>
+          <p className="text text--small text--muted">
+            Если нет — дополните материалы и повторите обработку.
+          </p>
+          <Link className="button button--primary button--full" to={`/app/projects/${id}/widget`}>
             Да, перейти к виджету
           </Link>
-          <Link className="button secondary full" to={`/app/projects/${id}/materials`}>
+          <Link
+            className="button button--secondary button--full"
+            to={`/app/projects/${id}/materials`}
+          >
             Нет, изменить материалы
           </Link>
         </Panel>
@@ -160,7 +175,7 @@ export function Testing() {
           <p>
             {db.documents.find((d) => d.projectId === id)?.content || 'Источник пока не добавлен'}
           </p>
-          <p className="small muted">Демонстрационный фрагмент источника</p>
+          <p className="text text--small text--muted">Демонстрационный фрагмент источника</p>
         </Modal>
       )}
     </>
@@ -207,14 +222,19 @@ export function AutoCheck() {
         title="Автоматическая проверка"
         sub="Определите нишу и проверьте ответы на 10 типовых вопросов"
       />
-      <div className="test-grid">
+      <div className="testing__grid">
         <Panel>
-          <div className="row between">
+          <div className="layout-row layout-row--between">
             <div>
               <h3>Автопроверка</h3>
-              <p className="small muted">Демонстрационный сценарий · 10 вопросов</p>
+              <p className="text text--small text--muted">
+                Демонстрационный сценарий · 10 вопросов
+              </p>
             </div>
-            <Link className="button secondary compact" to={`/app/projects/${id}/test`}>
+            <Link
+              className="button button--secondary button--compact"
+              to={`/app/projects/${id}/test`}
+            >
               Ручная проверка
             </Link>
           </div>
@@ -236,7 +256,9 @@ export function AutoCheck() {
           {running && (
             <>
               <Progress value={progress} />
-              <p className="muted small">Проверено {progress / 10} из 10 вопросов</p>
+              <p className="text text--muted text--small">
+                Проверено {progress / 10} из 10 вопросов
+              </p>
             </>
           )}
           {questions.map((q, i) => (
@@ -260,7 +282,9 @@ export function AutoCheck() {
               </span>
               {complete && (
                 <>
-                  <b className={scores[i] < 8 ? 'accent' : 'positive'}>{scores[i]} / 10</b>
+                  <b className={scores[i] < 8 ? 'text text--accent' : 'text text--positive'}>
+                    {scores[i]} / 10
+                  </b>
                   <Badge good={scores[i] >= 8}>{scores[i] < 8 ? 'Проверить' : 'Хорошо'}</Badge>
                 </>
               )}
@@ -271,25 +295,25 @@ export function AutoCheck() {
           <h3>Результат проверки</h3>
           {complete ? (
             <>
-              <h2 className="hero-number">8,4 / 10</h2>
-              <p className="positive">Высокое качество ответов</p>
-              <div className="grid two mini-metrics">
+              <h2 className="text text--hero-number">8,4 / 10</h2>
+              <p className="text text--positive">Высокое качество ответов</p>
+              <div className="layout-grid layout-grid--two metrics-summary">
                 <div>
                   <b>8</b>
                   <span>хороших ответов</span>
                 </div>
                 <div>
-                  <b className="accent">2</b>
+                  <b className="text text--accent">2</b>
                   <span>нужно проверить</span>
                 </div>
               </div>
-              <p className="small muted">
+              <p className="text text--small text--muted">
                 Оценка демонстрационная. Реальная генерация вопросов, определение ниши и оценка
                 качества требуют бэкенда.
               </p>
               <Button
                 variant="secondary"
-                className="full"
+                className="button--full"
                 onClick={() => {
                   setProgress(0);
                   setRunning(true);
@@ -297,20 +321,26 @@ export function AutoCheck() {
               >
                 Повторить проверку
               </Button>
-              <Link className="button primary full" to={`/app/projects/${id}/widget`}>
+              <Link
+                className="button button--primary button--full"
+                to={`/app/projects/${id}/widget`}
+              >
                 Перейти к виджету
               </Link>
-              <Link className="button secondary full" to={`/app/projects/${id}/materials`}>
+              <Link
+                className="button button--secondary button--full"
+                to={`/app/projects/${id}/materials`}
+              >
                 Изменить материалы
               </Link>
             </>
           ) : (
             <>
-              <p className="muted">
+              <p className="text text--muted">
                 Система сгенерирует 10 типовых вопросов и оценит ответы агента.
               </p>
               <Button
-                className="full"
+                className="button--full"
                 disabled={running}
                 onClick={() => {
                   setProgress(0);
@@ -319,7 +349,7 @@ export function AutoCheck() {
               >
                 {running ? 'Проверка…' : 'Запустить демо-проверку'}
               </Button>
-              <p className="small muted">
+              <p className="text text--small text--muted">
                 Ниша выбрана вручную для демонстрации. После подключения сервера она будет
                 определяться автоматически.
               </p>
@@ -331,7 +361,7 @@ export function AutoCheck() {
         <Modal title={questions[selected]} onClose={() => setSelected(undefined)}>
           <h3>Ответ агента</h3>
           <p>{demoAnswer(questions[selected]).text}</p>
-          <p className="small muted">
+          <p className="text text--small text--muted">
             {complete
               ? `Демо-оценка: ${scores[selected]} / 10. Соответствие вопросу, полнота ответа, наличие источника.`
               : 'Запустите проверку, чтобы увидеть оценку.'}

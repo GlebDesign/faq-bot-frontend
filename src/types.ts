@@ -72,6 +72,10 @@ export type WidgetConfig = {
   published: boolean;
 };
 export type User = {
+  id?: string;
+  accountId?: string;
+  role?: string;
+  auditRead?: boolean;
   name: string;
   email: string;
   avatar?: string;
