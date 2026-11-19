@@ -5,6 +5,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
+      fs: { deny: ['.env', '.env.*', '*.{crt,pem}', '**/.git/**', '**/.mock-data/**'] },
       proxy: {
         '/api': { target: env.API_PROXY_TARGET || 'http://127.0.0.1:8080', changeOrigin: true },
       },

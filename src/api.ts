@@ -43,7 +43,9 @@ export async function httpRequest<T>(path: string, options: RequestInit = {}): P
       headers,
       credentials: 'include',
       cache: 'no-store',
-      signal: options.signal ?? AbortSignal.timeout(10000),
+      signal: options.signal
+        ? AbortSignal.any([options.signal, AbortSignal.timeout(10000)])
+        : AbortSignal.timeout(10000),
     });
   } catch {
     throw new ApiError(

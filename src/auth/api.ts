@@ -26,7 +26,7 @@ function validateSession(value: AuthSession): AuthSession {
   return value;
 }
 
-async function getCSRF(): Promise<string> {
+export async function getCSRF(): Promise<string> {
   const result = await httpRequest<{ csrf_token: string }>('/v1/auth/csrf');
   if (typeof result?.csrf_token !== 'string' || !result.csrf_token)
     throw new ApiError(502, 'Не удалось подготовить защищённый запрос.');

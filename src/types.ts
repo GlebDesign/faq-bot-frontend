@@ -1,4 +1,14 @@
-export type Project = { id: string; name: string; url: string; active: boolean; progress: number };
+export type Project = {
+  id: string;
+  name: string;
+  url: string;
+  active: boolean;
+  progress: number;
+  description?: string;
+  revision?: number;
+  status?: 'draft' | 'published' | 'deleted';
+  publicId?: string;
+};
 export type Document = {
   id: string;
   projectId: string;

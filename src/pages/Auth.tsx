@@ -3,7 +3,7 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, Check, Eye, EyeOff } from 'lucide-react';
 import { useStore } from '../store';
 import { Brand, Button, Field, Modal, Panel } from '../ui';
-import { isDemoAuth, useSession } from '../auth/AuthProvider';
+import { useSession } from '../auth/AuthProvider';
 import { authErrorMessage } from '../auth/api';
 export function Auth({ register = false }: { register?: boolean }) {
   const { toast } = useStore();
@@ -146,11 +146,6 @@ export function Auth({ register = false }: { register?: boolean }) {
               {register ? 'Войти' : 'Зарегистрироваться'}
             </Link>
           </p>
-          {isDemoAuth && (
-            <p className="text text--small text--muted auth__demo-note">
-              Демонстрационный вход: любая почта и пароль от 8 символов. Пароль не сохраняется.
-            </p>
-          )}
         </form>
         <footer className="text text--small text--muted">
           Продолжая, вы соглашаетесь с условиями использования и политикой конфиденциальности
@@ -189,27 +184,17 @@ export function Auth({ register = false }: { register?: boolean }) {
       </section>
       {forgot && (
         <Modal title="Восстановить пароль" onClose={() => setForgot(false)}>
-          {isDemoAuth ? (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                toast('Демонстрация: письмо для восстановления не отправляется без сервера.');
-                setForgot(false);
-              }}
-            >
-              <p className="text text--muted">Укажите почту вашего аккаунта</p>
-              <Field label="Электронная почта" type="email" required />
-              <Button>Отправить ссылку</Button>
-            </form>
-          ) : (
-            <>
-              <p>
-                Восстановление пароля по почте станет доступно после подключения этого сервиса на
-                сервере.
-              </p>
-              <Button onClick={() => setForgot(false)}>Понятно</Button>
-            </>
-          )}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              toast('Не удалось отправить письмо. Попробуйте позже.');
+              setForgot(false);
+            }}
+          >
+            <p className="text text--muted">Укажите почту вашего аккаунта</p>
+            <Field label="Электронная почта" type="email" required />
+            <Button>Отправить ссылку</Button>
+          </form>
         </Modal>
       )}
     </div>
@@ -256,7 +241,7 @@ export function Landing() {
           ))}
         </div>
       </section>
-      <footer className="text text--muted">FAQ bot · Демонстрационный frontend</footer>
+      <footer className="text text--muted">FAQ bot</footer>
     </div>
   );
 }
