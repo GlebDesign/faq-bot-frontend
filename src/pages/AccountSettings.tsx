@@ -212,10 +212,7 @@ export function AccountSettings() {
       {password && (
         <Modal title="Смена пароля" onClose={() => setPassword(false)}>
           <p>
-            Ссылка для смены пароля будет приходить на <strong>{user.email}</strong>.
-          </p>
-          <p className="text text--muted">
-            Сейчас доступен деморежим: письмо не отправляется. Отправку подключим вместе с сервером.
+            Для смены пароля нужна ссылка на почту <strong>{user.email}</strong>.
           </p>
           <div className="modal__actions">
             <Button variant="secondary" onClick={() => setPassword(false)}>
@@ -224,7 +221,7 @@ export function AccountSettings() {
             <Button
               onClick={() => {
                 setPassword(false);
-                toast('Демо-запрос на смену пароля создан. Письмо не отправлено.');
+                toast('Не удалось отправить письмо. Попробуйте позже.');
               }}
             >
               Запросить письмо

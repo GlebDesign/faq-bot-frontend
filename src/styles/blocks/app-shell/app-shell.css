@@ -1,13 +1,3 @@
 .app-shell {
   min-height: 100vh;
 }
-.app-shell__demo-label {
-  font-size: 10px;
-  color: var(--secondary);
-  margin-top: 32px;
-}
-@media (max-width: 760px) {
-  .app-shell__demo-label {
-    margin-top: 24px;
-  }
-}

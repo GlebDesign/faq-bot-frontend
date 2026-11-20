@@ -30,7 +30,7 @@ test('регистрация, новый проект, знания, прове�
     page.getByText('Доставка по России занимает от 3 до 7 рабочих дней.', { exact: false }),
   ).toBeVisible();
   await page.getByRole('link', { name: 'Автопроверка', exact: true }).click();
-  await page.getByRole('button', { name: 'Запустить демо-проверку' }).click();
+  await page.getByRole('button', { name: 'Запустить проверку' }).click();
   await expect(page.getByRole('heading', { name: '8,4 / 10' })).toBeVisible();
   await page.getByRole('link', { name: 'Перейти к виджету', exact: true }).click();
   await page.getByLabel('Название бота').fill('Помощник Глеба');

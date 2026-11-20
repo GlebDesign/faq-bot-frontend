@@ -51,7 +51,7 @@ export const seed: DB = {
       projectId: 'acme',
       name: 'Презентация продукта.mp4',
       kind: 'media',
-      content: 'Демонстрационная расшифровка презентации продукта.',
+      content: 'Расшифровка презентации продукта.',
       size: 'Видео · 18 мин',
       status: 'ready',
       updated: '20 окт.',

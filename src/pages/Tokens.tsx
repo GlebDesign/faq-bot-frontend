@@ -134,10 +134,8 @@ export function Tokens() {
           <Button className="payment__submit" onClick={() => setPayment(true)}>
             Перейти к оплате
           </Button>
-          <p className="text text--small text--muted">Демо: платёж не производится.</p>
         </Panel>
       </div>
-      <p className="tokens__prices-hint text text--small text--muted">Цены указаны для примера.</p>
       <Panel className="payment-history">
         <h2>История пополнений</h2>
         <div className="data-table__scroll">
@@ -158,7 +156,7 @@ export function Tokens() {
                   <td>{t.text}</td>
                   <td>+{number(t.amount)}</td>
                   <td>{t.price === undefined ? '—' : money(t.price)}</td>
-                  <td className="text text--positive">{t.demo ? 'Демо' : 'Записано'}</td>
+                  <td className="text text--positive">{t.demo ? 'Без оплаты' : 'Записано'}</td>
                 </tr>
               ))}
             </tbody>
@@ -167,13 +165,12 @@ export function Tokens() {
         {!db.transactions.length && <p className="text text--muted">Пополнений пока нет</p>}
       </Panel>
       {payment && (
-        <Modal title="Демонстрация оплаты" onClose={() => setPayment(false)}>
+        <Modal title="Пополнение баланса" onClose={() => setPayment(false)}>
           <p>
             Пакет «{pack.name}» — {number(pack.amount)} токенов за {money(pack.price)}.
           </p>
           <p className="text text--muted">
-            Способ: {method === 'card' ? 'банковская карта' : 'СБП'}. Реальный платёж не
-            производится. Можно начислить тестовые токены на весь аккаунт.
+            Способ: {method === 'card' ? 'банковская карта' : 'СБП'}. Средства не списываются.
           </p>
           <div className="modal__actions">
             <Button variant="secondary" onClick={() => setPayment(false)}>
@@ -201,11 +198,11 @@ export function Tokens() {
                   })
                 ) {
                   setPayment(false);
-                  toast('Тестовые токены начислены на аккаунт');
+                  toast('Токены добавлены на аккаунт');
                 }
               }}
             >
-              Начислить тестовые токены
+              Добавить токены
             </Button>
           </div>
         </Modal>

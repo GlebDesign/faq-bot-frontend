@@ -315,7 +315,7 @@ export function WidgetPage() {
         <div className="layout-stack">
           <Panel>
             <h3>Предпросмотр</h3>
-            <p className="text text--small text--muted">Виджет на сайте · интерактивное демо</p>
+            <p className="text text--small text--muted">Так виджет будет выглядеть на сайте</p>
             <div className="widget-settings__preview">
               <WidgetPreview config={config} />
               <div
@@ -370,8 +370,7 @@ export function WidgetPage() {
                   Скопировать
                 </Button>
                 <p className="text text--small text--muted">
-                  Локальный код для тестирования. Публичный домен и серверный конфиг нужны для
-                  установки на реальный сайт.
+                  Вставьте код перед закрывающим тегом &lt;/body&gt;.
                 </p>
               </>
             ) : (
@@ -395,7 +394,7 @@ export function WidgetPage() {
                     p.progress = 100;
                   }
                 });
-                toast('Настройки сохранены. Демо-виджет готов к проверке.');
+                toast('Настройки сохранены');
               }}
             >
               <Check size={16} />
@@ -437,7 +436,7 @@ export function WidgetDemo() {
         <>
           <BrandDemo />
           <h1>Пример сайта клиента</h1>
-          <p className="text text--muted">Тестовое окружение для проверки отдельного виджета</p>
+          <p className="text text--muted">Проверьте виджет перед подключением к сайту</p>
           <Link to="/app">Вернуться в кабинет</Link>
         </>
       )}
@@ -483,5 +482,5 @@ export function WidgetDemo() {
   );
 }
 function BrandDemo() {
-  return <div className="text text--eyebrow">DEMO SITE / FAQ BOT</div>;
+  return <div className="text text--eyebrow">FAQ BOT</div>;
 }

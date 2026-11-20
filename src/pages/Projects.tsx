@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   ArrowRight,
@@ -12,34 +12,55 @@ import {
 import { useStore } from '../store';
 import type { Project } from '../types';
 import { Avatar, Badge, Button, Empty, Field, Heading, Modal, Panel, Progress } from '../ui';
+import { ApiError } from '../api';
+import { projectErrorMessage } from '../api/agents';
 export function ProjectForm({ project, onClose }: { project?: Project; onClose: () => void }) {
-  const { update, toast } = useStore();
+  const { saveProject, loadProject, toast } = useStore();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
+  const busyRef = useRef(false);
+  const [name, setName] = useState(project?.name || '');
+  const [website, setWebsite] = useState(project?.url || '');
+  const [snapshot, setSnapshot] = useState(project);
+  const [error, setError] = useState('');
+  const [conflict, setConflict] = useState(false);
+  const pending = useRef<{ signature: string; key: string } | null>(null);
+  const close = () => {
+    if (!busyRef.current) onClose();
+  };
   return (
-    <Modal title={project ? 'Изменить проект' : 'Создать проект'} onClose={onClose}>
+    <Modal title={project ? 'Изменить проект' : 'Создать проект'} onClose={close}>
       <form
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
+          if (busyRef.current) return;
+          if (!name.trim() || [...name.trim()].length > 100) {
+            setError('Введите название проекта от 1 до 100 символов.');
+            return;
+          }
+          const input = {
+            name: name.trim(),
+            website: website.trim(),
+            description: snapshot?.description || '',
+          };
+          const signature = JSON.stringify({ input, revision: snapshot?.revision });
+          if (pending.current?.signature !== signature)
+            pending.current = { signature, key: crypto.randomUUID() };
+          busyRef.current = true;
           setBusy(true);
-          const f = new FormData(e.currentTarget);
-          const id = project?.id || crypto.randomUUID();
-          update((d) => {
-            const next = {
-              id,
-              name: String(f.get('name')).trim(),
-              url: String(f.get('url'))
-                .trim()
-                .replace(/^https?:\/\//, ''),
-              active: project?.active || false,
-              progress: project?.progress || 0,
-            };
-            if (project) d.projects = d.projects.map((p) => (p.id === id ? next : p));
-            else d.projects.push(next);
-          });
-          toast(project ? 'Проект обновлён' : 'Проект создан');
-          onClose();
-          if (!project) navigate(`/app/projects/${id}/sources`);
+          setError('');
+          try {
+            const result = await saveProject(input, pending.current.key, snapshot);
+            toast(project ? 'Проект обновлён' : 'Проект создан');
+            onClose();
+            if (!project) navigate(`/app/projects/${result.id}/sources`);
+          } catch (failure) {
+            setError(projectErrorMessage(failure));
+            setConflict(failure instanceof ApiError && failure.status === 412);
+          } finally {
+            busyRef.current = false;
+            setBusy(false);
+          }
         }}
       >
         <p className="text text--muted">
@@ -48,36 +69,72 @@ export function ProjectForm({ project, onClose }: { project?: Project; onClose: 
         <Field
           label="Название проекта"
           name="name"
-          defaultValue={project?.name}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           placeholder="Acme Support"
           required
-          maxLength={80}
+          maxLength={200}
         />
         <Field
           label="Адрес сайта (необязательно)"
           name="url"
-          defaultValue={project?.url}
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
           placeholder="https://acme.ru"
         />
         <p className="text text--small text--muted">Данные проекта можно изменить позже</p>
+        {error && (
+          <p className="text text--error" role="alert">
+            {error}
+          </p>
+        )}
+        {conflict && snapshot && (
+          <Button
+            type="button"
+            variant="secondary"
+            disabled={busy}
+            onClick={async () => {
+              busyRef.current = true;
+              setBusy(true);
+              try {
+                const fresh = await loadProject(snapshot.id);
+                setSnapshot(fresh);
+                setName(fresh.name);
+                setWebsite(fresh.url);
+                pending.current = null;
+                setConflict(false);
+                setError('');
+              } catch (failure) {
+                setError(projectErrorMessage(failure));
+              } finally {
+                busyRef.current = false;
+                setBusy(false);
+              }
+            }}
+          >
+            Загрузить свежие данные
+          </Button>
+        )}
         <div className="layout-grid layout-grid--two">
-          <Button type="button" variant="secondary" onClick={onClose}>
+          <Button type="button" variant="secondary" onClick={close} disabled={busy}>
             Отмена
           </Button>
-          <Button disabled={busy}>{project ? 'Сохранить' : 'Создать проект'}</Button>
+          <Button disabled={busy || conflict}>
+            {busy ? 'Сохраняем…' : project ? 'Сохранить' : 'Создать проект'}
+          </Button>
         </div>
       </form>
     </Modal>
   );
 }
 export function Dashboard() {
-  const { db, update, toast } = useStore();
+  const { db, projectsStatus, projectsError, loadProjects } = useStore();
   const [edit, setEdit] = useState<Project>();
   const [deleting, setDeleting] = useState<Project>();
   const [menu, setMenu] = useState('');
   const [create, setCreate] = useState(false);
   const unanswered = db.conversations.filter((c) => !c.answered).length;
-  const unfinished = db.projects.find((p) => !p.active);
+  const unfinished = projectsStatus === 'ready' ? db.projects.find((p) => !p.active) : undefined;
   return (
     <>
       <Heading
@@ -101,7 +158,24 @@ export function Dashboard() {
       <Heading title="Мои проекты" sub={`${db.projects.length} проекта`} />
       <div className="dashboard__grid">
         <Panel className="project-list">
-          {db.projects.length === 0 && (
+          {projectsStatus === 'loading' && (
+            <Empty title="Загружаем проекты">
+              <p role="status" className="text text--muted">
+                Подождите немного…
+              </p>
+            </Empty>
+          )}
+          {projectsStatus === 'error' && (
+            <Empty title="Не удалось загрузить проекты">
+              <p role="alert" className="text text--error">
+                {projectsError}
+              </p>
+              <Button variant="secondary" onClick={() => void loadProjects()}>
+                Повторить загрузку
+              </Button>
+            </Empty>
+          )}
+          {projectsStatus === 'ready' && db.projects.length === 0 && (
             <Empty title="Создайте первый проект">
               <Button onClick={() => setCreate(true)}>
                 <Plus size={16} />
@@ -109,77 +183,83 @@ export function Dashboard() {
               </Button>
             </Empty>
           )}
-          {db.projects.map((p) => (
-            <div className="project-list__row" key={p.id}>
-              <div className="layout-row">
-                <Avatar name={p.name} />
-                <div>
-                  <h3>{p.name}</h3>
-                  <span className="text text--small text--muted">{p.url || 'Сайт не указан'}</span>
+          {projectsStatus === 'ready' &&
+            db.projects.map((p) => (
+              <div className="project-list__row" key={p.id}>
+                <div className="layout-row">
+                  <Avatar name={p.name} />
+                  <div>
+                    <h3>{p.name}</h3>
+                    <span className="text text--small text--muted">
+                      {p.url || 'Сайт не указан'}
+                    </span>
+                  </div>
+                  <Badge good={p.active}>{p.active ? 'Активен' : 'Нужно настроить'}</Badge>
+                  <div className="project-list__menu">
+                    <button
+                      className="icon-button"
+                      aria-label={`Действия ${p.name}`}
+                      onClick={() => setMenu(menu === p.id ? '' : p.id)}
+                    >
+                      <MoreHorizontal />
+                    </button>
+                    {menu === p.id && (
+                      <div className="dropdown">
+                        <button
+                          onClick={() => {
+                            setEdit(p);
+                            setMenu('');
+                          }}
+                        >
+                          <Settings size={15} />
+                          Изменить
+                        </button>
+                        <button
+                          onClick={() => {
+                            setDeleting(p);
+                            setMenu('');
+                          }}
+                        >
+                          <Trash2 size={15} />
+                          Удалить
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <Badge good={p.active}>{p.active ? 'Активен' : 'Нужно настроить'}</Badge>
-                <div className="project-list__menu">
-                  <button
-                    className="icon-button"
-                    aria-label={`Действия ${p.name}`}
-                    onClick={() => setMenu(menu === p.id ? '' : p.id)}
-                  >
-                    <MoreHorizontal />
-                  </button>
-                  {menu === p.id && (
-                    <div className="dropdown">
-                      <button
-                        onClick={() => {
-                          setEdit(p);
-                          setMenu('');
-                        }}
-                      >
-                        <Settings size={15} />
-                        Изменить
-                      </button>
-                      <button
-                        onClick={() => {
-                          setDeleting(p);
-                          setMenu('');
-                        }}
-                      >
-                        <Trash2 size={15} />
-                        Удалить
-                      </button>
+                <div className="layout-row project-list__metrics">
+                  {p.active ? (
+                    <>
+                      <div>
+                        <strong>92%</strong>
+                        <p className="text text--small text--muted">ответов найдено</p>
+                      </div>
+                      <div>
+                        <strong>
+                          {
+                            db.conversations.filter((c) => c.projectId === p.id && !c.answered)
+                              .length
+                          }
+                        </strong>
+                        <p className="text text--small text--muted">без ответа</p>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="layout-row project-list__progress">
+                      <span className="text text--small">Настройка</span>
+                      <Progress value={p.progress} />
+                      <b>{p.progress}%</b>
                     </div>
                   )}
+                  <Link
+                    className={`button ${p.active ? 'button--dark' : 'button--secondary'}`}
+                    to={`/app/projects/${p.id}${p.active ? '' : '/sources'}`}
+                  >
+                    {p.active ? 'Открыть проект' : 'Продолжить настройку'}
+                  </Link>
                 </div>
               </div>
-              <div className="layout-row project-list__metrics">
-                {p.active ? (
-                  <>
-                    <div>
-                      <strong>92%</strong>
-                      <p className="text text--small text--muted">ответов найдено</p>
-                    </div>
-                    <div>
-                      <strong>
-                        {db.conversations.filter((c) => c.projectId === p.id && !c.answered).length}
-                      </strong>
-                      <p className="text text--small text--muted">без ответа</p>
-                    </div>
-                  </>
-                ) : (
-                  <div className="layout-row project-list__progress">
-                    <span className="text text--small">Настройка</span>
-                    <Progress value={p.progress} />
-                    <b>{p.progress}%</b>
-                  </div>
-                )}
-                <Link
-                  className={`button ${p.active ? 'button--dark' : 'button--secondary'}`}
-                  to={`/app/projects/${p.id}${p.active ? '' : '/sources'}`}
-                >
-                  {p.active ? 'Открыть проект' : 'Продолжить настройку'}
-                </Link>
-              </div>
-            </div>
-          ))}
+            ))}
         </Panel>
         {unfinished && (
           <Panel className="attention">
@@ -223,39 +303,72 @@ export function Dashboard() {
       </div>
       {edit && <ProjectForm project={edit} onClose={() => setEdit(undefined)} />}
       {deleting && (
-        <Modal title="Удалить проект?" onClose={() => setDeleting(undefined)}>
-          <p>
-            Проект «{deleting.name}» и его демонстрационные материалы будут удалены из этого
-            браузера.
-          </p>
-          <div className="layout-row layout-row--end">
-            <Button variant="secondary" onClick={() => setDeleting(undefined)}>
-              Отмена
-            </Button>
-            <Button
-              onClick={() => {
-                update((d) => {
-                  d.projects = d.projects.filter((p) => p.id !== deleting.id);
-                  d.documents = d.documents.filter((x) => x.projectId !== deleting.id);
-                  d.conversations = d.conversations.filter((x) => x.projectId !== deleting.id);
-                  delete d.widgets[deleting.id];
-                });
-                setDeleting(undefined);
-                toast('Проект удалён');
-              }}
-            >
-              Удалить
-            </Button>
-          </div>
-        </Modal>
+        <DeleteProjectDialog
+          key={deleting.id}
+          project={deleting}
+          onClose={() => setDeleting(undefined)}
+        />
       )}
       {create && <ProjectForm onClose={() => setCreate(false)} />}
     </>
   );
 }
+function DeleteProjectDialog({ project, onClose }: { project: Project; onClose: () => void }) {
+  const { deleteProject, remoteProjects, toast } = useStore();
+  const key = useRef(crypto.randomUUID());
+  const busyRef = useRef(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const close = () => {
+    if (!busyRef.current) onClose();
+  };
+  return (
+    <Modal title="Удалить проект?" onClose={close}>
+      <p>
+        Проект «{project.name}» будет удалён вместе с материалами и настройками. Это действие нельзя
+        отменить.
+      </p>
+      {error && (
+        <p className="text text--error" role="alert">
+          {error}
+        </p>
+      )}
+      <div className="layout-row layout-row--end">
+        <Button variant="secondary" onClick={close} disabled={busy}>
+          Отмена
+        </Button>
+        <Button
+          disabled={busy}
+          onClick={async () => {
+            if (busyRef.current) return;
+            busyRef.current = true;
+            setBusy(true);
+            setError('');
+            try {
+              await deleteProject(project.id, key.current);
+              toast(
+                remoteProjects
+                  ? 'Проект убран из списка. Очистка данных запрошена.'
+                  : 'Проект удалён',
+              );
+              onClose();
+            } catch (failure) {
+              setError(projectErrorMessage(failure));
+            } finally {
+              busyRef.current = false;
+              setBusy(false);
+            }
+          }}
+        >
+          {busy ? 'Удаляем…' : 'Удалить'}
+        </Button>
+      </div>
+    </Modal>
+  );
+}
 export function Overview() {
   const { id } = useParams();
-  const { db, update, toast } = useStore();
+  const { db, update, toast, remoteProjects } = useStore();
   const p = db.projects.find((x) => x.id === id)!;
   const docs = db.documents.filter((d) => d.projectId === id);
   const count = db.conversations.filter((c) => c.projectId === id && !c.answered).length;
@@ -284,17 +397,23 @@ export function Overview() {
           <h2 className="text text--large-number">{p.active ? '● Активен' : 'Не подключён'}</h2>
           <div className="layout-row layout-row--between">
             <span className="text text--small text--muted">{p.url}</span>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                update((d) => {
-                  d.projects.find((x) => x.id === id)!.active = !p.active;
-                });
-                toast(p.active ? 'Виджет на паузе' : 'Виджет активирован');
-              }}
-            >
-              {p.active ? 'Поставить на паузу' : 'Активировать'}
-            </Button>
+            {remoteProjects ? (
+              <Link className="button button--secondary" to="widget">
+                Настроить виджет
+              </Link>
+            ) : (
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  update((d) => {
+                    d.projects.find((x) => x.id === id)!.active = !p.active;
+                  });
+                  toast(p.active ? 'Виджет на паузе' : 'Виджет активирован');
+                }}
+              >
+                {p.active ? 'Поставить на паузу' : 'Активировать'}
+              </Button>
+            )}
           </div>
         </Panel>
       </div>

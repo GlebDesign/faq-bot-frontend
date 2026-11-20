@@ -262,7 +262,7 @@ export function Materials({ adding = false }: { adding?: boolean }) {
                     projectId: id!,
                     name: mode === 'text' ? String(f.get('title')) : file!.name,
                     kind: mode!,
-                    content: text || 'Содержимое файла будет обработано после подключения сервера.',
+                    content: text || '',
                     size:
                       mode === 'text'
                         ? `Текст · ${content.length} символов`
@@ -332,10 +332,6 @@ export function Materials({ adding = false }: { adding?: boolean }) {
                     <Check size={18} />
                   </div>
                 )}
-                <p className="text text--small text--muted">
-                  Демо: сохраняется название файла. Разбор PDF, документов и транскрибация
-                  выполняются сервером.
-                </p>
               </>
             )}
             {error && (
@@ -427,7 +423,7 @@ export function Processing() {
         <p className="text text--muted">
           {progress === 100
             ? 'Теперь можно проверить ответы агента'
-            : 'Демонстрация этапов: фрагменты, индексирование, подготовка поиска'}
+            : 'Подготавливаем материалы для поиска'}
         </p>
         <Progress value={progress} />
       </Panel>

@@ -17,7 +17,7 @@ export function demoAnswer(question: string) {
       source: 'Условия доставки',
     };
   return {
-    text: 'В демонстрационной базе нет подходящей информации. Добавьте материал по этому вопросу или оставьте заявку специалисту.',
+    text: 'В базе знаний нет подходящей информации. Добавьте материал по этому вопросу или оставьте заявку специалисту.',
   };
 }
 export function Testing() {
@@ -99,11 +99,7 @@ export function Testing() {
                 )}
               </div>
             ))}
-            {busy && (
-              <span className="text text--small text--muted">
-                Агент готовит демонстрационный ответ…
-              </span>
-            )}
+            {busy && <span className="text text--small text--muted">Агент готовит ответ…</span>}
             <div ref={last} />
           </div>
           <form
@@ -127,7 +123,7 @@ export function Testing() {
             <input
               aria-label="Тестовый вопрос"
               name="message"
-              placeholder="Задайте другой тестовый вопрос…"
+              placeholder="Задайте вопрос агенту…"
               required
               autoComplete="off"
             />
@@ -136,9 +132,6 @@ export function Testing() {
               <span>Отправить</span>
             </Button>
           </form>
-          <p className="text text--small text--muted">
-            Демо-ответы по возврату и доставке. ИИ будет подключён через API.
-          </p>
         </Panel>
         <Panel>
           <h3>Проверьте качество</h3>
@@ -175,7 +168,6 @@ export function Testing() {
           <p>
             {db.documents.find((d) => d.projectId === id)?.content || 'Источник пока не добавлен'}
           </p>
-          <p className="text text--small text--muted">Демонстрационный фрагмент источника</p>
         </Modal>
       )}
     </>
@@ -227,9 +219,7 @@ export function AutoCheck() {
           <div className="layout-row layout-row--between">
             <div>
               <h3>Автопроверка</h3>
-              <p className="text text--small text--muted">
-                Демонстрационный сценарий · 10 вопросов
-              </p>
+              <p className="text text--small text--muted">10 вопросов по нише проекта</p>
             </div>
             <Link
               className="button button--secondary button--compact"
@@ -307,10 +297,6 @@ export function AutoCheck() {
                   <span>нужно проверить</span>
                 </div>
               </div>
-              <p className="text text--small text--muted">
-                Оценка демонстрационная. Реальная генерация вопросов, определение ниши и оценка
-                качества требуют бэкенда.
-              </p>
               <Button
                 variant="secondary"
                 className="button--full"
@@ -347,12 +333,8 @@ export function AutoCheck() {
                   setRunning(true);
                 }}
               >
-                {running ? 'Проверка…' : 'Запустить демо-проверку'}
+                {running ? 'Проверка…' : 'Запустить проверку'}
               </Button>
-              <p className="text text--small text--muted">
-                Ниша выбрана вручную для демонстрации. После подключения сервера она будет
-                определяться автоматически.
-              </p>
             </>
           )}
         </Panel>
@@ -363,7 +345,7 @@ export function AutoCheck() {
           <p>{demoAnswer(questions[selected]).text}</p>
           <p className="text text--small text--muted">
             {complete
-              ? `Демо-оценка: ${scores[selected]} / 10. Соответствие вопросу, полнота ответа, наличие источника.`
+              ? `Оценка: ${scores[selected]} / 10. Соответствие вопросу, полнота ответа, наличие источника.`
               : 'Запустите проверку, чтобы увидеть оценку.'}
           </p>
         </Modal>

@@ -51,7 +51,7 @@ export function Support() {
           {
             date: chosen.created,
             title: 'Заявка создана',
-            body: 'Обращение сохранено в демо-кабинете.',
+            body: 'Обращение сохранено.',
           },
         ]
       : [];
@@ -220,7 +220,11 @@ export function Support() {
                       <div>
                         <time className="text text--small text--muted">{event.date}</time>
                         <strong>{event.title}</strong>
-                        <p className="text text--muted">{event.body}</p>
+                        <p className="text text--muted">
+                          {event.body.startsWith('Обращение сохранено в демо-кабинете.')
+                            ? 'Обращение сохранено.'
+                            : event.body}
+                        </p>
                       </div>
                     </li>
                   ))}
@@ -278,7 +282,7 @@ export function Support() {
                       {
                         date: now,
                         title: 'Заявка создана',
-                        body: 'Обращение сохранено в демо-кабинете. Отправка в поддержку станет доступна после подключения сервера.',
+                        body: 'Обращение сохранено.',
                       },
                     ],
                   });
@@ -289,7 +293,7 @@ export function Support() {
                 setSearch('');
                 setCreate(false);
                 setMobileDetails(true);
-                toast('Заявка сохранена в демо-кабинете');
+                toast('Заявка сохранена');
               }
             }}
           >
@@ -318,9 +322,6 @@ export function Support() {
               </Select>
             </label>
             <Field label="Вложение (до 25 МБ)" name="attachment" type="file" />
-            <p className="text text--small text--muted">
-              Демо: заявка и имя вложения сохраняются в этом браузере.
-            </p>
             {formError && (
               <p className="text text--error" role="alert">
                 {formError}

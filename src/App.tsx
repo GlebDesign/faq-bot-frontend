@@ -35,6 +35,8 @@ import { Tokens } from './pages/Tokens';
 import { Support } from './pages/Support';
 import { AuthProvider, useSession } from './auth/AuthProvider';
 import { authErrorMessage } from './auth/api';
+import { ApiError } from './api';
+import { projectErrorMessage } from './api/agents';
 const nav = [
   { to: '/app', label: 'Проекты', icon: LayoutGrid, end: true },
   { to: '/app/statistics', label: 'Общая статистика', icon: ChartNoAxesColumn },
@@ -42,7 +44,7 @@ const nav = [
   { to: '/app/support', label: 'Поддержка', icon: Headphones },
 ];
 function Shell() {
-  const { db, toast } = useStore();
+  const { db, toast, projectsStatus } = useStore();
   const { logout } = useSession();
   const [menu, setMenu] = useState(false);
   const [create, setCreate] = useState(false);
@@ -175,6 +177,7 @@ function Shell() {
             <Button
               variant="dark"
               className="topbar__create-project"
+              disabled={projectsStatus !== 'ready'}
               onClick={() => setCreate(true)}
             >
               <Plus size={16} />
@@ -183,17 +186,60 @@ function Shell() {
           </div>
         </header>
         <Outlet />
-        <div className="app-shell__demo-label">Демо · данные хранятся в этом браузере</div>
       </main>
       {create && <ProjectForm onClose={() => setCreate(false)} />}
     </div>
   );
 }
 export function ProjectLayout() {
-  const { db } = useStore();
+  const { db, remoteProjects, projectsStatus, loadProject } = useStore();
   const { id } = useParams();
   const project = db.projects.find((p) => p.id === id);
   const loc = useLocation();
+  const [attempt, setAttempt] = useState(0);
+  const [detail, setDetail] = useState({ id: '', loading: true, error: '', missing: false });
+  useEffect(() => {
+    if (!remoteProjects || !id || projectsStatus === 'loading') return;
+    let current = true;
+    setDetail({ id, loading: true, error: '', missing: false });
+    void loadProject(id)
+      .then(() => {
+        if (current) setDetail({ id, loading: false, error: '', missing: false });
+      })
+      .catch((error) => {
+        if (current)
+          setDetail({
+            id,
+            loading: false,
+            error: projectErrorMessage(error),
+            missing: error instanceof ApiError && error.status === 404,
+          });
+      });
+    return () => {
+      current = false;
+    };
+  }, [id, remoteProjects, projectsStatus, loadProject, attempt]);
+  if (remoteProjects && (projectsStatus === 'loading' || detail.id !== id || detail.loading)) {
+    return (
+      <div className="empty">
+        <h1>Загружаем проект</h1>
+        <p role="status">Подождите немного…</p>
+      </div>
+    );
+  }
+  if (remoteProjects && detail.error)
+    return (
+      <div className="empty">
+        <h1>{detail.missing ? 'Проект не найден' : 'Не удалось загрузить проект'}</h1>
+        <p role="alert">{detail.error}</p>
+        {!detail.missing && (
+          <Button variant="secondary" onClick={() => setAttempt((value) => value + 1)}>
+            Повторить загрузку
+          </Button>
+        )}
+        <Link to="/app">Вернуться к проектам</Link>
+      </div>
+    );
   if (!project)
     return (
       <div className="empty">

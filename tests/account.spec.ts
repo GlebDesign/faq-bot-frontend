@@ -50,7 +50,7 @@ test('профиль: фото, отмена, сохранение, уведом
   await expect(dialog).not.toContainText(originalEmail);
   await expect(dialog.locator('input[type=password]')).toHaveCount(0);
   await dialog.getByRole('button', { name: 'Запросить письмо' }).click();
-  await expect(page.getByRole('status')).toContainText('Письмо не отправлено');
+  await expect(page.getByRole('status')).toContainText('Не удалось отправить письмо');
 });
 
 test('пакеты и оплата: клавиатура, отмена и единый баланс после демо-пополнения', async ({
@@ -66,16 +66,18 @@ test('пакеты и оплата: клавиатура, отмена и еди
   await expect(page.locator('.payment__total')).toContainText('2 490');
   await page.getByRole('radio', { name: 'СБП', exact: true }).click();
   await page.getByRole('button', { name: 'Перейти к оплате' }).click();
-  await expect(page.getByRole('dialog')).toContainText('Реальный платёж не производится');
+  await expect(page.getByRole('dialog')).toContainText('Средства не списываются');
   await page.getByRole('dialog').getByRole('button', { name: 'Отмена' }).click();
   await expect(page.getByRole('link', { name: 'Баланс токенов' })).toContainText('24 800');
   await page.getByRole('button', { name: 'Перейти к оплате' }).click();
-  await page.getByRole('button', { name: 'Начислить тестовые токены' }).click();
+  await page.getByRole('button', { name: 'Добавить токены' }).click();
   await expect(page.getByRole('link', { name: 'Баланс токенов' })).toContainText('124 800');
   await expect(page.locator('.payment-history__table tbody tr').first()).toContainText(
     'Для команды',
   );
-  await expect(page.locator('.payment-history__table tbody tr').first()).toContainText('Демо');
+  await expect(page.locator('.payment-history__table tbody tr').first()).toContainText(
+    'Без оплаты',
+  );
   await page.reload();
   await expect(page.locator('.tokens__balance-value')).toContainText('124 800');
   await expect(page.locator('.payment-history__table tbody tr')).toHaveCount(3);

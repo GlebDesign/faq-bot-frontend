@@ -51,9 +51,7 @@ export function Statistics({ project = false }: { project?: boolean }) {
       <div className="statistics__grid">
         <Panel>
           <h3>Динамика вопросов</h3>
-          <p className="text text--small text--muted">
-            Количество вопросов по дням · демонстрационные данные
-          </p>
+          <p className="text text--small text--muted">Количество вопросов по дням</p>
           <div className="chart">
             <div className="chart__axis">
               <span>300</span>
@@ -139,9 +137,6 @@ export function Statistics({ project = false }: { project?: boolean }) {
           </div>
         </Panel>
       )}
-      <p className="text text--small text--muted">
-        График и проценты — демо-данные. Список неотвеченных вопросов связан с локальными диалогами.
-      </p>
     </>
   );
 }
@@ -314,7 +309,7 @@ export function Inbox() {
                   setFilter('all');
                   setAttachment('');
                   form.reset();
-                  toast('Ответ сохранён в демо-диалоге');
+                  toast('Ответ сохранён');
                 }}
               >
                 <label className="icon-button">
@@ -354,9 +349,6 @@ export function Inbox() {
           )}
         </section>
       </div>
-      <p className="text text--small text--muted">
-        Демо: сообщения сохраняются локально. Отправка посетителю потребует подключения сервера.
-      </p>
     </>
   );
 }
@@ -380,10 +372,7 @@ export function Partner() {
             {t}
           </div>
         ))}
-        <p className="text text--muted">
-          Контракт API и серверные ключи согласуем с Go-командой. Секретный ключ не должен попадать
-          в код браузера.
-        </p>
+        <p className="text text--muted">Храните ключ API на вашем сервере.</p>
       </Panel>
     </>
   );
@@ -393,7 +382,7 @@ export function Platform() {
   const [search, setSearch] = useState('');
   return (
     <>
-      <Heading title="Аудит" sub="Локальная история демонстрационных операций" />
+      <Heading title="Аудит" sub="История операций аккаунта" />
       <SearchField value={search} onChange={setSearch} placeholder="Поиск по событиям" />
       <Panel>
         {db.transactions
@@ -403,9 +392,6 @@ export function Platform() {
               {t.text} · {t.date}
             </div>
           ))}
-        <p className="text text--muted">
-          Полный серверный аудит и права platform-admin будут доступны после подключения API.
-        </p>
       </Panel>
     </>
   );

@@ -35,6 +35,7 @@
   display: grid;
   grid-template-columns: minmax(0, 752fr) minmax(300px, 356fr);
   gap: 16px;
+  margin-bottom: 16px;
 }
 .tokens__packages > p {
   margin: 4px 0 12px;
@@ -43,10 +44,6 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
-}
-.tokens__prices-hint {
-  margin: 16px 0;
-  line-height: 16px;
 }
 @media (min-width: 761px) and (max-width: 1250px) {
   .tokens__purchase {
